@@ -19,6 +19,17 @@
 2. to multi music
 
 # data sturcture
+- playlist
+playlist -> playlist -> playlist
+    |           |           |
+    V           V           V
+   song        song        song
+    |           |           |
+    V           V           V
+   song        song        song
+
+- collection
+song -> song -> song -> song -> song
 
 
 # Requirement
