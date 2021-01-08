@@ -17,6 +17,7 @@
 # Needed to add
 1. playlist search
 2. to multi music
+3. duration to mm:ss
 
 # data sturcture
 - playlist
@@ -33,6 +34,11 @@ playlist -> playlist -> playlist
 ```
 song -> song -> song -> song -> song
 ```
+# additional feature
+- menu
+- database
+- shuffle
+- countdown
 
 # Requirement
 - add song to collection
