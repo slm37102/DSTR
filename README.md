@@ -20,6 +20,7 @@
 
 # data sturcture
 - playlist
+```
 playlist -> playlist -> playlist
     |           |           |
     V           V           V
@@ -27,10 +28,11 @@ playlist -> playlist -> playlist
     |           |           |
     V           V           V
    song        song        song
-
+```
 - collection
+```
 song -> song -> song -> song -> song
-
+```
 
 # Requirement
 - add song to collection
