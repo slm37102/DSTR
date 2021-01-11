@@ -1,20 +1,13 @@
 #include<iostream>
 using namespace std;
 
-class Music{
-    string title, singer;
+class SongCollection{
     Node* playlist;
+    string title, singer;
     int duration;
     public:
-        // Music(){
-        //     duration = NULL;
-        // }
-        // Music(string t, string s, int d){
-        //     title = t;
-        //     singer = s;
-        //     duration = d;
-        // }
-        void addSong(string t, string s, int d) {
+        SongCollection* next;
+        SongCollection(string t, string s, int d) {
             title = t;
             singer = s;
             duration = d;
@@ -28,15 +21,24 @@ class Music{
         int getDuration(){
             return duration;
         }
-        string playlistSearch(){
-            return playlist->data;
+        Node* playlistSearch(){
+            //loop through the playlist data --not finish (loop through playlist)
+            return playlist;
         };
 };
 
-// class Playlist{
-//     public:
-    
-// };
+class Playlist{
+    string playlistName;
+    public:
+        Playlist(string name){
+            playlistName = name;
+        }
+        Playlist* next;
+        SongCollection* data;
+        string getPlaylistName(){
+            return playlistName;
+        }
+};
 
 class Node{
     public:
@@ -44,66 +46,98 @@ class Node{
         Node* next;
 };
 
-void Append(Node** head_ref, string song){
-    Node* newNode = new Node();
-    newNode->data = song;
+void addSong(SongCollection** head_ref, string t, string s, int d) {
+    SongCollection* newNode = new SongCollection(t, s, d);
     newNode->next = NULL;
     if (*head_ref == NULL)
     {
         *head_ref = newNode;
         return;
     }
-    Node* last = *head_ref;
+    SongCollection* last = *head_ref;
     while(last->next != NULL){
         last = last->next;
     }
     last->next = newNode;
 }
 
-void collection(){
-    int option;
-    Music* music = new Music;
+void addPlaylist(Playlist** head_ref, string name) {
+    Playlist* newNode = new Playlist(name);
+    newNode->next = NULL;
+    if (*head_ref == NULL)
+    {
+        *head_ref = newNode;
+        return;
+    }
+    Playlist* last = *head_ref;
+    while(last->next != NULL){
+        last = last->next;
+    }
+    last->next = newNode;
+}
+
+// void Append(Node** head_ref, string song){
+//     Node* newNode = new Node();
+//     newNode->data = song;
+//     newNode->next = NULL;
+//     if (*head_ref == NULL)
+//     {
+//         *head_ref = newNode;
+//         return;
+//     }
+//     Node* last = *head_ref;
+//     while(last->next != NULL){
+//         last = last->next;
+//     }
+//     last->next = newNode;
+// }
+
+void collectionMenu(SongCollection* song){
+    int option, userSong, duration;
+    string singer, title;
     do{
+        // system("cls");
         cout << "Collection Menu" << endl;
         cin >> option;
         switch(option)
         {
             case 0:
-                // exit
+                // back
                 break;
             case 1:
             {
-                //add song
-                string singer, title;
-                int duration;
+                //Add song --finished (?)
                 cout << "title: ";
                 cin >> title;
                 cout << "singer: ";
                 cin >> singer;
                 cout << "duration: ";
                 cin >> duration;
-                music->addSong(title, singer, duration);
+                addSong(&song ,title, singer, duration);
                 break;
             }
             case 2:
-                // display song
-                cout << music->getTitle() << " " << music->getSinger() << " " << music->getDuration();
+            {
+                // display song --not finished (need loop through songs)
+                cout << song->getTitle() << " " << song->getSinger() << " " << song->getDuration();
                 break;
+            }
             case 3:
-                //delete music
-                music = new Music;
+            {
+                //delete music --not finished (find userSong and delete it)
+                cin >> userSong;
                 break;
+            }
             case 4:
             {
-                //Playlist search --not finished
-                string song;
-                cin >> song;
-                // music->playlistSearch();  
+                //Playlist search --not finished (find userSong and display playlist it)
+                cin >> userSong;
                 break;
             }
             default:
                 //wrong output
                 cout << "wrong input";
+                // system("pause");
                 break;
         }
         cout << endl << endl;
@@ -111,44 +145,79 @@ void collection(){
 
 }
 
-void playlist(){
-    int option;
+void playlistMenu(SongCollection* song, Playlist* playlist){
+    int option, userPlaylist, userSong;
+    string playlistName;
     do{
+        // system("cls");
         cout << "Collection Menu" << endl;
         cin >> option;
         switch(option)
         {
             case 0:
+                // back
                 break;
             case 1:
             {
-                // string singer, title;
-                // int duration;
-                // cout << "title: ";
-                // cin >> title;
-                // cout << "singer: ";
-                // cin >> singer;
-                // cout << "duration: ";
-                // cin >> duration;
-                // music->addSong(title, singer, duration);
+                // Create playlist --finished (?)
+
+                cin >> playlistName;
+                addPlaylist(&playlist, playlistName);
                 break;
             }
             case 2:
-                // cout << music->getTitle() << " " << music->getSinger() << " " << music->getDuration();
+            {
+                // View playlist --not finished 
+
+                // display all playlist
+                // -- loop through all playlist 
+                // -- get pl name, 3 songs in it 
                 break;
+            }
             case 3:
-                // delete music;
+            {
+                // Add songs --not finished 
+
+                // display all songs in collection
+                cin >> userSong;
+                // display all songs in playlist
+                cin >> userPlaylist;
+                // findSong
+                // if not in playlist: addSong
                 break;
+            }
             case 4:
             {
-                //Playlist search
-                string song;
-                cin >> song;
-                // music->playlistSearch();  
+                // View songs --not finished 
+
+                cin >> userPlaylist;
+
+                break;
+            }
+            case 5:
+            {
+                // Remove songs --not finished 
+                
+                break;
+            }
+            case 6:
+            {
+                // Playlist navigation --not finished ?????
+
+                break;
+            }
+            case 7:
+            {
+                // Delete playlist --not finished 
+
+                
+                // display all songs in playlist
+                cin >> userPlaylist;
                 break;
             }
             default:
                 cout << "wrong input";
+                // system("pause");
                 break;
         }
         cout << endl << endl;
@@ -158,10 +227,12 @@ void playlist(){
 
 int main(){
     int option;
-    do{    
+    SongCollection* song;
+    Playlist* playlist;
+    do{
+        // system("cls");
         cout << "Main Menu" << endl;
         cin >> option;
-
         switch (option)
         {
             case 0:
@@ -169,14 +240,15 @@ int main(){
                 break;
             case 1:
                 //to music collection
-                collection();
+                collectionMenu(song);
                 break;
             case 2:
                 //to playlist 
-                playlist();
+                playlistMenu(song, playlist);
                 break;            
             default:
                 cout << "wrong input"<< endl << endl << endl;
+                // system("pause");
                 break;
         }
     } while(option != 0);
