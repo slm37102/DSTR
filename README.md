@@ -25,14 +25,17 @@
 - shuffle
 - countdown
 - queue on playlist
+- doubly linked list to able to have prev music 
 
 # data sturcture
 - playlist
 ```
 playlist -> playlist -> playlist
+    ^           ^           ^
     |           |           |
     V           V           V
    song        song        song
+    ^           ^           ^
     |           |           |
     V           V           V
    song        song        song
