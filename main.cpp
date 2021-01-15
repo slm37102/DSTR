@@ -244,7 +244,7 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
             }
             case 3:
             {
-                // Add songs --finished (?)
+                // Add songs --finished (?) change to display able to add song?
 
                 // display all playlist
                 displayPlaylist(playlist);
@@ -283,7 +283,7 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
             }
             case 4:
             {
-                // View songs --not finished (maybe)
+                // View songs -- finished (maybe?)
 
                 // display all playlist
                 displayPlaylist(playlist);
@@ -294,22 +294,41 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
                 {
                     selectedPlaylist = selectedPlaylist->next;
                 }
-                cout << selectedPlaylist->getPlaylistName();
+                cout << selectedPlaylist->getPlaylistName() << ":";
                 displayPlaylistSong(selectedPlaylist->songList);
                 break;
             }
             case 5:
             {
-                // Remove songs --not finished 
+                // Remove songs --not finished (if no song)
                 
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
-                // display all/avaliable songs in collection
-                cin >> userSong;
                 // loop through playlist
+                Playlist* selectedPlaylist = playlist;
+                for (int i = 0; i < userPlaylist - 1; i++)
+                {
+                    selectedPlaylist = selectedPlaylist->next;
+                }
+                // display songs in playlist
+                displayPlaylistSong(selectedPlaylist->songList);
+                cin >> userSong;
                 // loop through song
-                // if song == song delete song
+                PlaylistSong* selectedSong, *prevSong = selectedPlaylist->songList;
+
+                if (prevSong->next == NULL){
+                    playlist = NULL;
+                } else {
+                    for (int i = 0; i < userSong - 2; i++)
+                    {
+                        prevSong = prevSong->next;
+                    }
+                    selectedSong = prevSong->next;
+                    prevSong->next = selectedSong->next;
+                }
+                // delete song
+                delete selectedSong;
                 break;
             }
             case 6:
@@ -328,7 +347,7 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
                 // display all playlist
                 displayPlaylist(playlist);                
                 cin >> userPlaylist;
-                if (playlist->next == NULL){
+                if (playlist == NULL && playlist->next == NULL){
                     playlist = NULL;
                 } else {
                     Playlist* prevNode = playlist, *deletePlaylist;
@@ -349,7 +368,8 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
                         }
                     }
                     // delete playlist
-                    deletePlaylist = NULL;
+                    delete deletePlaylist;
+                    // deletePlaylist = NULL;
                 }
                 break;
             }

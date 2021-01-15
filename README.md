@@ -8,9 +8,9 @@
 - playlist
 1. Create playlist      --finished(song?)
 2. View playlist        --finished(song?)
-3. Add songs            --finished(not tested)
+3. Add songs            --finished(?)
 4. View songs           --finished(?)
-5. Remove songs         --not finished
+5. Remove songs         --finished(?)
 6. Playlist navigation  --not finished
 7. Delete playlist      --finished(song?)
 
