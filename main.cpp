@@ -89,7 +89,26 @@ void removePlaylist(){
 
 }
 
+void displaySong(SongCollection* last){
+    // if no song inside
+    // if(last == NULL){
+    //     cout << "No song";
+    //     return;
+    // }
+    int num = 1;
+    while(last != NULL){
+        cout << endl << num << ". " << last->getTitle() << " - " << last->getSinger() << " " << endl;
+        last = last->next;
+        num++;
+    }
+} 
+
 void displayPlaylist(Playlist* last){
+    // if no playlist inside 
+    // if(last == NULL){
+    //     cout << "No Playlist";
+    //     return;
+    // }
     int num = 1;
     while(last != NULL){
         cout << endl << num << ". " << last->getPlaylistName() << ": ";
@@ -101,7 +120,6 @@ void displayPlaylist(Playlist* last){
         last = last->next;
         num++;
     }
-    cout << endl; 
 } 
 
 void collectionMenu(SongCollection* song){
@@ -167,7 +185,7 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
     string playlistName;
     do{
         // system("cls");
-        cout << "Collection Menu" << endl;
+        cout << "Playlist Menu" << endl;
         cout << "1. Create playlist " << endl;
         cout << "2. View playlist" << endl;
         cout << "3. Add songs" << endl;
@@ -185,7 +203,6 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
             case 1:
             {
                 // Create playlist --finished (?)
-
                 cin >> playlistName;
                 addPlaylist(&playlist, playlistName);
                 break;
@@ -202,30 +219,48 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
             }
             case 3:
             {
-                // Add songs --not finished 
+                // Add songs --not finished (check if song alr in playlist)
 
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
-                
+
                 // display all/avaliable songs in collection
+                displaySong(song);
                 cin >> userSong;
-
-
-                // findSong in collection
-
-                // if not in playlist: addSong
-
+                // loop to user selected playlist
+                Playlist* selectedPlaylist = playlist;
+                for (int i = 0; i < userPlaylist - 1; i++)
+                {
+                    selectedPlaylist = selectedPlaylist->next;
+                }
+                // loop to the last song 
+                
+                // loop to user selected song
+                SongCollection* selectedSong = song;
+                for (int i = 0; i < userSong - 1; i++)
+                {
+                    selectedSong = selectedSong->next;
+                }
+                // append user selected song
+                selectedPlaylist;
                 break;
             }
             case 4:
             {
-                // View songs --not finished 
+                // View songs --not finished (maybe)
 
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
                 // show all song in playlist
+                Playlist* selectedPlaylist = playlist;
+                for (int i = 0; i < userPlaylist - 1; i++)
+                {
+                    selectedPlaylist = selectedPlaylist->next;
+                }
+                cout << selectedPlaylist->getPlaylistName();
+                displaySong(selectedPlaylist->data);
                 break;
             }
             case 5:

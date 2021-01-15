@@ -18,6 +18,8 @@
 1. playlist search
 2. to multi music
 3. duration to mm:ss
+4. error if exceed length
+5. try catch
 
 # additional feature
 - menu
