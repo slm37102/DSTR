@@ -1,23 +1,23 @@
 #include<iostream>
 using namespace std;
 
-class Node{
+class PlaylistName{
     public:
         string data;
-        Node* next;
+        PlaylistName* next;
 };
 
 class SongCollection{
-    Node* playlist;
+    PlaylistName* playlist;
     string title, singer;
-    int duration;
+    int duration; //to mm:ss
     public:
         SongCollection* next;
         SongCollection(){}
-        SongCollection(string t, string s, int d) {
-            title = t;
-            singer = s;
-            duration = d;
+        SongCollection(string title, string singer, int duration) {
+            this->title = title;
+            this->singer = singer;
+            this->duration = duration;
         }
         string getTitle(){
             return title;
@@ -34,19 +34,30 @@ class SongCollection{
         };
 };
 
+class PlaylistSong{
+    public:
+        SongCollection* song;
+        PlaylistSong* next;
+        PlaylistSong(){}
+        PlaylistSong(SongCollection* song){
+            this->song = song;
+        }
+};
+
 class Playlist{
     string playlistName;
     public:
         Playlist(){}
-        Playlist(string name){
-            playlistName = name;
+        Playlist(string playlistName){
+            this->playlistName = playlistName;
         }
         Playlist* next;
-        SongCollection* data = NULL;
+        PlaylistSong* songList;
         string getPlaylistName(){
             return playlistName;
         }
 };
+
 
 
 void addSong(SongCollection** head_ref, string t, string s, int d) {
@@ -89,7 +100,7 @@ void removePlaylist(){
 
 }
 
-void displaySong(SongCollection* last){
+void displaySongCollection(SongCollection* last){ // not sure
     // if no song inside
     // if(last == NULL){
     //     cout << "No song";
@@ -103,6 +114,20 @@ void displaySong(SongCollection* last){
     }
 } 
 
+void displayPlaylistSong(PlaylistSong* last){
+    // if no song inside
+    // if(last == NULL){
+    //     cout << "No song";
+    //     return;
+    // }
+    int num = 1;
+    while(last != NULL){
+        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " " << endl;
+        last = last->next;
+        num++;
+    }
+}
+
 void displayPlaylist(Playlist* last){
     // if no playlist inside 
     // if(last == NULL){
@@ -112,10 +137,10 @@ void displayPlaylist(Playlist* last){
     int num = 1;
     while(last != NULL){
         cout << endl << num << ". " << last->getPlaylistName() << ": ";
-        SongCollection* songHead = last->data;
-        for(int i=0; i < 3 && songHead != NULL; i++){
-            cout << songHead->getTitle() << " ";
-            songHead = songHead->next;
+        PlaylistSong* playlistSong = last->songList;
+        for(int i=0; i < 3 && playlistSong != NULL; i++){
+            cout << playlistSong->song->getTitle() << " ";
+            playlistSong = playlistSong->next;
         }
         last = last->next;
         num++;
@@ -209,7 +234,7 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
             }
             case 2:
             {
-                // View playlist --not finished
+                // View playlist --finished (?)
 
                 // display all playlist
                 // -- loop through all playlist
@@ -219,14 +244,14 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
             }
             case 3:
             {
-                // Add songs --not finished (check if song alr in playlist)
+                // Add songs --finished (?)
 
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
 
                 // display all/avaliable songs in collection
-                displaySong(song);
+                displaySongCollection(song);
                 cin >> userSong;
                 // loop to user selected playlist
                 Playlist* selectedPlaylist = playlist;
@@ -234,16 +259,26 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
                 {
                     selectedPlaylist = selectedPlaylist->next;
                 }
-                // loop to the last song 
-                
                 // loop to user selected song
                 SongCollection* selectedSong = song;
                 for (int i = 0; i < userSong - 1; i++)
                 {
                     selectedSong = selectedSong->next;
                 }
+                // loop to the last song and find if have similar song
+                bool flag = true;
+                PlaylistSong *playlistSong = selectedPlaylist->songList, *newSong = new PlaylistSong(selectedSong);
+                while (playlistSong != NULL)
+                {
+                    if (playlistSong->song == selectedSong) {
+                        flag = false;
+                        break;
+                    }
+                    playlistSong = playlistSong->next;
+                }
                 // append user selected song
-                selectedPlaylist;
+                if (flag)
+                    playlistSong = newSong;
                 break;
             }
             case 4:
@@ -260,7 +295,7 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
                     selectedPlaylist = selectedPlaylist->next;
                 }
                 cout << selectedPlaylist->getPlaylistName();
-                displaySong(selectedPlaylist->data);
+                displayPlaylistSong(selectedPlaylist->songList);
                 break;
             }
             case 5:
@@ -305,8 +340,8 @@ void playlistMenu(SongCollection* song, Playlist* playlist){
                     deletePlaylist = prevNode->next;
                     prevNode->next = deletePlaylist->next;
                     // delete songs
-                    if (deletePlaylist->data != NULL) {
-                        SongCollection* deleteSong = deletePlaylist->data, *temp;
+                    if (deletePlaylist->songList != NULL) {
+                        PlaylistSong* deleteSong = deletePlaylist->songList, *temp;
                         while(deleteSong != NULL){
                             temp = deleteSong;
                             delete temp;

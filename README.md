@@ -6,13 +6,13 @@
 4. Playlist search
 
 - playlist
-1. Create playlist 
-2. View playlist
-3. Add songs
-4. View songs
-5. Remove songs
-6. Playlist navigation
-7. Delete playlist
+1. Create playlist      --finished(song?)
+2. View playlist        --finished(song?)
+3. Add songs            --finished(not tested)
+4. View songs           --finished(?)
+5. Remove songs         --not finished
+6. Playlist navigation  --not finished
+7. Delete playlist      --finished(song?)
 
 # Needed to add
 1. playlist search
