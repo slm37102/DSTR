@@ -47,7 +47,13 @@ playlist -> playlist -> playlist
 ```
 - collection
 ```
-song -> song -> song -> song -> song
+  song   ->   song   ->   song
+    |           |           |
+    V           V           V
+playlist    playlist    playlist
+    |           |           |
+    V           V           V
+playlist    playlist    playlist
 ```
 
 # Requirement
@@ -75,3 +81,26 @@ properly updated.
 6. Playlist navigation – Navigating a particular playlist.
 7. Delete playlist – Delete a particular playlist.
 
+PlaylistName
+- length 
+- Playlist (Playlist)
+- song location (SC)
+- next
+
+SongCollection
+- song detail (t,s,d)
+- length
+- playlistName (PN)
+- next
+
+PlaylistSong
+- length
+- song (SC)
+- prev
+- next
+
+Playlist
+- playlistName (string)
+- length 
+- next 
+- songList (PlaylistSong)

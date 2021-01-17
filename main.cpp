@@ -88,10 +88,6 @@ void addSong(SongCollection** head_ref, string title, string singer, string dura
     (*head_ref)->length++;
 }
 
-void removeSong(SongCollection** head_ref, int index){
-
-}
-
 void displaySongCollection(SongCollection* last){
     // if no song inside
     if(last == NULL){
@@ -106,7 +102,11 @@ void displaySongCollection(SongCollection* last){
         num++;
     }
     cout << endl;
-} 
+}
+
+void removeSong(SongCollection** head_ref, int index){
+
+}
 
 void playlistSearch(SongCollection* song){
     PlaylistName* playlistName = song->playlistName;
@@ -122,6 +122,7 @@ void playlistSearch(SongCollection* song){
         cout << num << ". " << playlistName->playlist->getPlaylistName() << endl; 
         playlistName = playlistName->next;
     }
+    num++;
 }
 
 void addPlaylist(Playlist** head_ref, string name) {
@@ -181,6 +182,8 @@ void displayPlaylist(Playlist* last){
     }
     cout << endl;
 } 
+
+
 
 void collectionMenu(){
     int option, userSong;
@@ -282,7 +285,7 @@ void collectionMenu(){
                 }
                 // loop to the selected song
                 SongCollection *selectedSong = song;
-                for (int i = 0; i < userSong; i++)
+                for (int i = 0; i < userSong - 1; i++)
                 {
                     selectedSong = selectedSong->next;
                 }
@@ -380,18 +383,13 @@ void playlistMenu(){
                 }
                 // loop to the last song and find if have the same song
                 PlaylistSong *lastPlaylistSong = selectedPlaylist->songList;
-                while (lastPlaylistSong->next != NULL) {
+                while (lastPlaylistSong != NULL) {
                     // if any duplicate song
                     if (lastPlaylistSong->song == selectedSong) {
                         cout << "The playlist has this song";
                         break;
                     }
                     lastPlaylistSong = lastPlaylistSong->next;
-                }
-                // less one check so if once more
-                if (lastPlaylistSong->song == selectedSong){
-                    cout << "The playlist has this song";
-                    break;
                 }
                 // append user selected song
                 newSong->prev = lastPlaylistSong;
@@ -485,7 +483,7 @@ void playlistMenu(){
                 }
                 // loop through the selected playlist
                 Playlist* selectedPlaylist= playlist;
-                for (int i = 0; i < userPlaylist; i++)
+                for (int i = 0; i < userPlaylist - 1; i++)
                 {
                     selectedPlaylist = selectedPlaylist->next;   
                 }
@@ -567,11 +565,27 @@ void playlistMenu(){
                         // delete all the songs in the playlist
                         PlaylistSong* deleteSong = deletePlaylist->songList, *temp;
                         while(deleteSong != NULL){
-                            temp = deleteSong;
-                            // TODO: delete the playlist name in the collection
-                            // temp->song->playlistName;
-                            delete temp;
-                            deleteSong = deleteSong->next;
+                            temp = deleteSong->next;
+                            // delete the playlist name in the collection
+                            PlaylistName* deletePlaylistName = deleteSong->song->playlistName, *prevPlaylistName = NULL;
+                            // find the playlist that needed to delete
+                            if (deletePlaylistName->playlist == deletePlaylist) {
+                                deleteSong->song->playlistName = deletePlaylistName->next;
+                                delete deletePlaylistName;
+                                deletePlaylistName = NULL;
+                            }
+                            while (deletePlaylistName != NULL){
+                                if (deletePlaylistName->playlist == deletePlaylist) {
+                                    prevPlaylistName->next = deletePlaylistName->next;
+                                    delete deletePlaylistName;
+                                    break;
+                                } 
+                                prevPlaylistName = deletePlaylistName;
+                                deletePlaylistName = deletePlaylistName->next;
+                            }
+                            // delete song
+                            delete deleteSong;
+                            deleteSong = temp;
                         }
                     }
                     // delete playlist
