@@ -8,6 +8,7 @@ class PlaylistSong;
 
 class PlaylistName{
     public:
+        int length=0;
         Playlist* playlist;
         PlaylistSong* songLocation;
         PlaylistName* next;
@@ -16,6 +17,7 @@ class PlaylistName{
 class SongCollection{
     string title, singer, duration; 
     public:
+        int length=0;
         SongCollection* next;
         PlaylistName* playlistName;
         SongCollection(){}
@@ -37,6 +39,7 @@ class SongCollection{
 
 class PlaylistSong{
     public:
+        int length=0;
         SongCollection* song;
         PlaylistSong* prev;
         PlaylistSong* next;
@@ -49,6 +52,7 @@ class PlaylistSong{
 class Playlist{
     string playlistName;
     public:
+        int length=0;
         Playlist* next;
         PlaylistSong* songList;
         Playlist(){}
@@ -68,6 +72,7 @@ void addSong(SongCollection** head_ref, string title, string singer, string dura
     newNode->next = NULL;
     if (*head_ref == NULL){
         *head_ref = newNode;
+        (*head_ref)->length = 1;
         return;
     }
     SongCollection* last = *head_ref;
@@ -80,6 +85,7 @@ void addSong(SongCollection** head_ref, string title, string singer, string dura
         last = last->next;
     }
     last->next = newNode;
+    (*head_ref)->length++;
 }
 
 void removeSong(SongCollection** head_ref, int index){
@@ -97,6 +103,7 @@ void displaySongCollection(SongCollection* last){
         last = last->next;
         num++;
     }
+    cout << endl;
 } 
 
 void playlistSearch(SongCollection* song){
@@ -121,6 +128,7 @@ void addPlaylist(Playlist** head_ref, string name) {
     if (*head_ref == NULL)
     {
         *head_ref = newNode;
+        (*head_ref)->length = 1;
         return;
     }
     Playlist* last = *head_ref;
@@ -133,6 +141,7 @@ void addPlaylist(Playlist** head_ref, string name) {
         last = last->next;
     }
     last->next = newNode;
+    (*head_ref)->length++;
 }
 
 void displayPlaylistSong(PlaylistSong* last){
@@ -143,10 +152,11 @@ void displayPlaylistSong(PlaylistSong* last){
     // }
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " " << endl;
+        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " ";
         last = last->next;
         num++;
     }
+    cout << endl;
 }
 
 void displayPlaylist(Playlist* last){
@@ -157,15 +167,16 @@ void displayPlaylist(Playlist* last){
     // }
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->getPlaylistName() << ": ";
+        cout << endl << num << ". " << last->getPlaylistName() << ":";
         PlaylistSong* playlistSong = last->songList;
         for(int i=0; i < 3 && playlistSong != NULL; i++){
-            cout << playlistSong->song->getTitle() << " ";
+            cout << " " << playlistSong->song->getTitle();
             playlistSong = playlistSong->next;
         }
         last = last->next;
         num++;
     }
+    cout << endl;
 } 
 
 void collectionMenu(){
@@ -208,20 +219,24 @@ void collectionMenu(){
                 //delete music --not finished (find userSong and delete it)
                 displaySongCollection(song);
                 cin >> userSong;
+                if (song->length < userSong){
+                    cout << "no such number";
+                    break;
+                }
                 // loop to the selected song
                 SongCollection *prevSong = song, *selectedSong;
-                if (song == NULL)
+                if (song == NULL) // if no song in collection
                 {
                     cout << "no song";
                 }
-                else if (song->next == NULL)
+                else if (song->next == NULL) // if one song in collection
                 {
                     selectedSong = song;
                     song = NULL;
                 } 
                 else
                 {
-                    for (int i = 0; i < userSong - 2; i++)
+                    for (int i = 0; i < userSong - 1; i++)
                     {
                         prevSong = prevSong->next;
                     }
@@ -239,16 +254,6 @@ void collectionMenu(){
                     {
                         selectedPlaylist->playlist->songList = selectedPlaylistSong->next; // head set to next
                     }
-                    // else // the head is not the song 
-                    // {
-                    //     // loop till the song in playlist
-                    //     while(selectedPlaylistSong != NULL){ 
-                    //         if (selectedPlaylistSong->song == selectedSong){
-                    //             break;
-                    //         }
-                    //         selectedPlaylistSong = selectedPlaylistSong->next;
-                    //     }
-                    // }
                     if (selectedPlaylistSong->prev != NULL){
                         selectedPlaylistSong->prev->next = selectedPlaylistSong->next;
                     }
@@ -271,6 +276,10 @@ void collectionMenu(){
                 // display all the song in song collection
                 displaySongCollection(song);
                 cin >> userSong;
+                if (song->length < userSong){
+                    cout << "no such number";
+                    break;
+                }
                 // loop to the selected song
                 SongCollection *selectedSong = song;
                 for (int i = 0; i < userSong; i++)
@@ -336,10 +345,17 @@ void playlistMenu(){
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
-
+                if (playlist->length < userPlaylist){
+                    cout << "no such number";
+                    break;
+                }
                 // display all/avaliable songs in collection
                 displaySongCollection(song);
                 cin >> userSong;
+                if (song->length < userSong){
+                    cout << "no such number";
+                    break;
+                }
                 // loop to user selected playlist
                 Playlist* selectedPlaylist = playlist;
                 for (int i = 0; i < userPlaylist - 1; i++)
@@ -353,26 +369,32 @@ void playlistMenu(){
                     selectedSong = selectedSong->next;
                 }
                 // if the playlist is empty
+                PlaylistSong* newSong = new PlaylistSong(selectedSong);
+                newSong->next = NULL;
                 if (selectedPlaylist->songList == NULL){
-                    selectedPlaylist->songList = new PlaylistSong(selectedSong);
+                    newSong->prev = NULL;
+                    selectedPlaylist->songList = newSong;
                     break;
                 }
                 // loop to the last song and find if have the same song
-                bool same = false;
-                PlaylistSong *playlistSong = selectedPlaylist->songList, *newSong = new PlaylistSong(selectedSong);
-                while (playlistSong != NULL)
+                PlaylistSong *lastPlaylistSong = selectedPlaylist->songList;
+                while (lastPlaylistSong->next != NULL)
                 {
                     // if any duplicate song
-                    if (playlistSong->song == selectedSong) {
+                    if (lastPlaylistSong->song == selectedSong) {
                         cout << "The playlist has this song";
-                        same = true;
                         break;
                     }
-                    playlistSong = playlistSong->next;
+                    lastPlaylistSong = lastPlaylistSong->next;
+                }
+                if (lastPlaylistSong->song == selectedSong){
+                    cout << "The playlist has this song";
+                    break;
                 }
                 // append user selected song
-                if (!same)
-                    playlistSong = newSong;
+                newSong->prev = lastPlaylistSong;
+                lastPlaylistSong->next = newSong;
+            
                 break;
             }
             case 4:
@@ -382,6 +404,10 @@ void playlistMenu(){
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
+                if (playlist->length < userPlaylist){
+                    cout << "no such number";
+                    break;
+                }
                 // show all song in playlist
                 Playlist* selectedPlaylist = playlist;
                 for (int i = 0; i < userPlaylist - 1; i++)
@@ -399,6 +425,10 @@ void playlistMenu(){
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
+                if (playlist->length < userPlaylist){
+                    cout << "no such number";
+                    break;
+                }
                 // loop through playlist
                 Playlist* selectedPlaylist = playlist;
                 for (int i = 0; i < userPlaylist - 1; i++)
@@ -408,6 +438,10 @@ void playlistMenu(){
                 // display songs in playlist
                 displayPlaylistSong(selectedPlaylist->songList);
                 cin >> userSong;
+                if (selectedPlaylist->length < userSong){
+                    cout << "no such number";
+                    break;
+                }
                 // loop through song
                 PlaylistSong* selectedSong, *prevSong = selectedPlaylist->songList;
 
@@ -432,6 +466,10 @@ void playlistMenu(){
                 // show user all the playlist
                 displayPlaylist(playlist);                
                 cin >> userPlaylist;
+                 if (playlist->length < userPlaylist){
+                    cout << "no such number";
+                    break;
+                }
                 // loop through the selected playlist
                 Playlist* selectedPlaylist= playlist;
                 for (int i = 0; i < userPlaylist; i++)
@@ -494,6 +532,10 @@ void playlistMenu(){
                 // display all playlist
                 displayPlaylist(playlist);                
                 cin >> userPlaylist;
+                 if (playlist->length < userPlaylist){
+                    cout << "no such number";
+                    break;
+                }
                 if (playlist == NULL && playlist->next == NULL){
                     playlist = NULL;
                 } else {
