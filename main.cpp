@@ -514,6 +514,17 @@ void playlistMenu(){
                             deleteSong = deleteSong->next;
                         }
                     }
+                    
+                    /*
+                    Try: (Line 510 - 514)
+                    PlaylistSong* deleteSong = deletePlaylist->songList, *nextSong;
+                    while(deleteSong != NULL){
+                    nextSong = deleteSong->next;
+                    delete deleteSong;
+                    deleteSong = nextSong;
+                    }
+                    */
+                    
                     // delete playlist
                     delete deletePlaylist;
                 }
