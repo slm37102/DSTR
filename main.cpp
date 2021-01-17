@@ -523,10 +523,14 @@ void playlistMenu(){
                     delete deleteSong;
                     deleteSong = nextSong;
                     }
+                    deleteSong = NULL;
                     */
                     
                     // delete playlist
                     delete deletePlaylist;
+                    /* Add: (Line 531)
+                    deletePlaylist = NULL;
+                    */
                 }
                 break;
             }
