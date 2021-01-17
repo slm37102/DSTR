@@ -12,7 +12,7 @@
 4. View songs           --finished(?)
 5. Remove songs         --finished(got problem, doubly, remove from collection)
 6. Playlist navigation  --not finished
-7. Delete playlist      --finished(merge song?)
+7. Delete playlist      --finished(always delete last one)
 
 # Needed to add
 1. playlist search          --finished
