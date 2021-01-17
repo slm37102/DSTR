@@ -10,7 +10,7 @@ class PlaylistName{
     public:
         int length=0;
         Playlist* playlist;
-        PlaylistSong* songLocation;
+        PlaylistSong* songLocation; // to store the song location in the playlist
         PlaylistName* next;
 };
 
@@ -93,10 +93,12 @@ void removeSong(SongCollection** head_ref, int index){
 }
 
 void displaySongCollection(SongCollection* last){
+    // if no song inside
     if(last == NULL){
         cout << "The collection is empty!";
         return;
     }
+    // display
     int num = 1;
     while(last != NULL){
         cout << endl << num << ". " << last->getTitle() << " - " << last->getSinger() << " Duration: " << last->getDuration();
@@ -146,10 +148,11 @@ void addPlaylist(Playlist** head_ref, string name) {
 
 void displayPlaylistSong(PlaylistSong* last){
     // if no song inside
-    // if(last == NULL){
-    //     cout << "No song";
-    //     return;
-    // }
+    if(last == NULL){
+        cout << "The Playlist is empty!";
+        return;
+    }
+    // display
     int num = 1;
     while(last != NULL){
         cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " ";
@@ -160,11 +163,11 @@ void displayPlaylistSong(PlaylistSong* last){
 }
 
 void displayPlaylist(Playlist* last){
-    // if no playlist inside 
-    // if(last == NULL){
-    //     cout << "No Playlist";
-    //     return;
-    // }
+    // if no song inside
+    if(last == NULL){
+        cout << "There is no playlist!";
+        return;
+    }
     int num = 1;
     while(last != NULL){
         cout << endl << num << ". " << last->getPlaylistName() << ":";
@@ -193,12 +196,10 @@ void collectionMenu(){
         cin >> option;
         switch(option)
         {
-            case 0:
-                // back
+            case 0: // back
                 break;
-            case 1:
+            case 1: //Add song --finished (?)
             {
-                //Add song --finished (?)
                 cout << "Title: ";
                 cin >> title;
                 cout << "Singer: ";
@@ -208,15 +209,19 @@ void collectionMenu(){
                 addSong(&song ,title, singer, duration);
                 break;
             }
-            case 2:
+            case 2:// display song --not finished (need loop through songs)                
             {
-                // display song --not finished (need loop through songs)
                 displaySongCollection(song);
                 break;
             }
-            case 3:
+            case 3: //delete music --not finished (find userSong and delete it)
             {
-                //delete music --not finished (find userSong and delete it)
+                // if no song in collection
+                if (song == NULL) 
+                {
+                    cout << "no song";
+                    break;
+                }
                 displaySongCollection(song);
                 cin >> userSong;
                 if (song->length < userSong){
@@ -224,55 +229,50 @@ void collectionMenu(){
                     break;
                 }
                 // loop to the selected song
-                SongCollection *prevSong = song, *selectedSong;
-                if (song == NULL) // if no song in collection
+                SongCollection *prevSong, *selectedSong = song;
+                if (song->next == NULL) // if one song in collection
                 {
-                    cout << "no song";
-                }
-                else if (song->next == NULL) // if one song in collection
-                {
-                    selectedSong = song;
                     song = NULL;
                 } 
-                else
+                else // more then one song
                 {
                     for (int i = 0; i < userSong - 1; i++)
                     {
-                        prevSong = prevSong->next;
+                        prevSong = selectedSong;
+                        selectedSong = selectedSong->next;
                     }
-                    selectedSong = prevSong->next;
                     prevSong->next = selectedSong->next;
                 }
-
                 // delete song in the playlist
                 PlaylistName* selectedPlaylist = selectedSong->playlistName;
                 while (selectedPlaylist != NULL) // in every playlist that have the song
                 {
                     //loop to the song location in the playlist
                     PlaylistSong* selectedPlaylistSong = selectedPlaylist->songLocation; 
-                    if (selectedPlaylistSong->song == selectedSong) // if the head is the song
-                    {
+                    if (selectedPlaylistSong->song == selectedSong) { // if the head is the song
                         selectedPlaylist->playlist->songList = selectedPlaylistSong->next; // head set to next
                     }
-                    if (selectedPlaylistSong->prev != NULL){
-                        selectedPlaylistSong->prev->next = selectedPlaylistSong->next;
+                    if (selectedPlaylistSong->prev != NULL) { //prev got node
+                        selectedPlaylistSong->prev->next = selectedPlaylistSong->next; // prev's next to next
                     }
-                    if (selectedPlaylistSong->next != NULL){
-                        selectedPlaylistSong->next->prev = selectedPlaylistSong->prev;
+                    if (selectedPlaylistSong->next != NULL) { //next got node
+                        selectedPlaylistSong->next->prev = selectedPlaylistSong->prev; // next's prev to prev
                     }
-
                     delete selectedPlaylistSong;
                     selectedPlaylist = selectedPlaylist->next;
                 }
                 // delete the songs
                 delete selectedSong;
-
                 break;
             }
-            case 4:
+            case 4: //Playlist search --not finished (find userSong and display playlist it)
             {
-                //Playlist search --not finished (find userSong and display playlist it)
-
+                // if no song in collection
+                if (song == NULL) 
+                {
+                    cout << "no song";
+                    break;
+                }
                 // display all the song in song collection
                 displaySongCollection(song);
                 cin >> userSong;
@@ -318,30 +318,24 @@ void playlistMenu(){
         cin >> option;
         switch(option)
         {
-            case 0:
-                // back
+            case 0: // back
                 break;
-            case 1:
+            case 1: // Create playlist --finished (?)
             {
-                // Create playlist --finished (?)
                 cin >> playlistName;
                 addPlaylist(&playlist, playlistName);
                 break;
             }
-            case 2:
+            case 2: // View playlist --finished (?)
             {
-                // View playlist --finished (?)
-
                 // display all playlist
                 // -- loop through all playlist
                 // -- get playlist name, 3 songs
                 displayPlaylist(playlist);
                 break;
             }
-            case 3:
+            case 3: // Add songs --finished (add to song collection) change to display able to add song?
             {
-                // Add songs --finished (doubly, add to song collection) change to display able to add song?
-
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
@@ -368,18 +362,25 @@ void playlistMenu(){
                 {
                     selectedSong = selectedSong->next;
                 }
-                // if the playlist is empty
                 PlaylistSong* newSong = new PlaylistSong(selectedSong);
                 newSong->next = NULL;
+                // if the playlist is empty
                 if (selectedPlaylist->songList == NULL){
+                    // add song to playlist
                     newSong->prev = NULL;
                     selectedPlaylist->songList = newSong;
+                    // add playlist name to song collection
+                    PlaylistName* playlistName = new PlaylistName;
+                    playlistName->next = NULL;
+                    playlistName->length = 1;
+                    playlistName->playlist = selectedPlaylist; //playlist location
+                    playlistName->songLocation = newSong; //playlist song location
+                    selectedSong->playlistName= playlistName;
                     break;
                 }
                 // loop to the last song and find if have the same song
                 PlaylistSong *lastPlaylistSong = selectedPlaylist->songList;
-                while (lastPlaylistSong->next != NULL)
-                {
+                while (lastPlaylistSong->next != NULL) {
                     // if any duplicate song
                     if (lastPlaylistSong->song == selectedSong) {
                         cout << "The playlist has this song";
@@ -387,6 +388,7 @@ void playlistMenu(){
                     }
                     lastPlaylistSong = lastPlaylistSong->next;
                 }
+                // less one check so if once more
                 if (lastPlaylistSong->song == selectedSong){
                     cout << "The playlist has this song";
                     break;
@@ -394,13 +396,23 @@ void playlistMenu(){
                 // append user selected song
                 newSong->prev = lastPlaylistSong;
                 lastPlaylistSong->next = newSong;
-            
+                // add playlist name to song collection
+                PlaylistName* playlistName = new PlaylistName;
+                playlistName->next = NULL;
+                playlistName->length++; 
+                playlistName->playlist = selectedPlaylist; //playlist location
+                playlistName->songLocation = newSong; //playlist song location
+                selectedSong->playlistName= playlistName;
+
                 break;
             }
-            case 4:
+            case 4: // View songs -- finished (maybe?)
             {
-                // View songs -- finished (maybe?)
-
+                // if the playlist is empty
+                if (playlist == NULL){  
+                    cout << "no playlist";
+                    break;
+                }
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
@@ -418,10 +430,8 @@ void playlistMenu(){
                 displayPlaylistSong(selectedPlaylist->songList);
                 break;
             }
-            case 5:
+            case 5: // Remove songs --not finished (if no song, doubly, delete from song collection)
             {
-                // Remove songs --not finished (if no song, doubly, delete from song collection)
-                
                 // display all playlist
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
@@ -459,10 +469,13 @@ void playlistMenu(){
                 delete selectedSong;
                 break;
             }
-            case 6:
+            case 6: // Playlist navigation --not finished ?????
             {
-                // Playlist navigation --not finished ?????
-
+                // if the playlist is empty
+                if (playlist == NULL){  
+                    cout << "no playlist";
+                    break;
+                }
                 // show user all the playlist
                 displayPlaylist(playlist);                
                 cin >> userPlaylist;
@@ -521,14 +534,16 @@ void playlistMenu(){
                             countdown = 0;
                             break;
                     }
-
                 }while (selectedSong != NULL && songOption == 2);
                 break;
             }
-            case 7:
-            {
-                // Delete playlist --not finished (error when delete the last node)
-
+            case 7: // Delete playlist --not finished (error when delete the last node)
+            {                
+                // if the playlist is empty
+                if (playlist == NULL){  
+                    cout << "no playlist";
+                    break;
+                }
                 // display all playlist
                 displayPlaylist(playlist);                
                 cin >> userPlaylist;
@@ -536,22 +551,25 @@ void playlistMenu(){
                     cout << "no such number";
                     break;
                 }
-                if (playlist == NULL && playlist->next == NULL){
+                Playlist* prevNode, *deletePlaylist = playlist;
+                if (playlist->next == NULL) { //only one playlist
                     playlist = NULL;
                 } else {
-                    Playlist* prevNode = playlist, *deletePlaylist;
                     // loop through playlist
-                    for (int i = 0; i < userPlaylist - 2; i++) {
-                        prevNode = prevNode->next;
+                    for (int i = 0; i < userPlaylist - 1; i++) {
+                        prevNode = deletePlaylist;
+                        deletePlaylist = deletePlaylist->next; // take the node needed to delete
                     }
-                    // take remove current node
-                    deletePlaylist = prevNode->next;
+                    // link previous to next
                     prevNode->next = deletePlaylist->next;
                     // delete songs
-                    if (deletePlaylist->songList != NULL) {
+                    if (deletePlaylist->songList != NULL) { // if there is song in playlist
+                        // delete all the songs in the playlist
                         PlaylistSong* deleteSong = deletePlaylist->songList, *temp;
                         while(deleteSong != NULL){
                             temp = deleteSong;
+                            // TODO: delete the playlist name in the collection
+                            // temp->song->playlistName;
                             delete temp;
                             deleteSong = deleteSong->next;
                         }

@@ -8,7 +8,7 @@
 - playlist
 1. Create playlist      --finished(merge song?)
 2. View playlist        --finished(merge song?)
-3. Add songs            --finished(wont add second?, doubly, add to collection)
+3. Add songs            --finished(add to collection)
 4. View songs           --finished(?)
 5. Remove songs         --finished(got problem, doubly, remove from collection)
 6. Playlist navigation  --not finished
