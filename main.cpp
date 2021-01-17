@@ -72,6 +72,11 @@ void addSong(SongCollection** head_ref, string title, string singer, string dura
     }
     SongCollection* last = *head_ref;
     while(last->next != NULL){
+        if (last->getTitle() == title && last->getSinger() == singer)
+        {
+            cout << "Song with this singer exist.";
+            return;
+        }
         last = last->next;
     }
     last->next = newNode;
@@ -120,6 +125,11 @@ void addPlaylist(Playlist** head_ref, string name) {
     }
     Playlist* last = *head_ref;
     while(last->next != NULL){
+        if (last->getPlaylistName() == name)
+        {
+            cout << "Playlist exist.";
+            return;
+        }
         last = last->next;
     }
     last->next = newNode;
@@ -342,20 +352,26 @@ void playlistMenu(){
                 {
                     selectedSong = selectedSong->next;
                 }
-                // loop to the last song and find if have similar song
-                bool flag = true;
+                // if the playlist is empty
+                if (selectedPlaylist->songList == NULL){
+                    selectedPlaylist->songList = new PlaylistSong(selectedSong);
+                    break;
+                }
+                // loop to the last song and find if have the same song
+                bool same = false;
                 PlaylistSong *playlistSong = selectedPlaylist->songList, *newSong = new PlaylistSong(selectedSong);
                 while (playlistSong != NULL)
                 {
                     // if any duplicate song
                     if (playlistSong->song == selectedSong) {
-                        flag = false;
+                        cout << "The playlist has this song";
+                        same = true;
                         break;
                     }
                     playlistSong = playlistSong->next;
                 }
                 // append user selected song
-                if (flag)
+                if (!same)
                     playlistSong = newSong;
                 break;
             }
@@ -511,8 +527,6 @@ void playlistMenu(){
         cout << endl << endl;
     } while(option != 0);
 }
-
-
 
 int main(){
     int option;
