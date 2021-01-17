@@ -588,8 +588,23 @@ void playlistMenu(){
                             deleteSong = temp;
                         }
                     }
+                    
+                    /*
+                    Try: (Line 510 - 514)
+                    PlaylistSong* deleteSong = deletePlaylist->songList, *nextSong;
+                    while(deleteSong != NULL){
+                    nextSong = deleteSong->next;
+                    delete deleteSong;
+                    deleteSong = nextSong;
+                    }
+                    deleteSong = NULL;
+                    */
+                    
                     // delete playlist
                     delete deletePlaylist;
+                    /* Add: (Line 531)
+                    deletePlaylist = NULL;
+                    */
                 }
                 break;
             }
