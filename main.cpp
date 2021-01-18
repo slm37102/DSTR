@@ -122,7 +122,7 @@ void playlistSearch(SongCollection* song){
         cout << num << ". " << playlistName->playlist->getPlaylistName() << endl; 
         playlistName = playlistName->next;
     }
-    num++;
+    num++; // this should be in while loop?
 }
 
 void addPlaylist(Playlist** head_ref, string name) {
@@ -156,7 +156,7 @@ void displayPlaylistSong(PlaylistSong* last){
     // display
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " ";
+        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " "; // need to display duration also?
         last = last->next;
         num++;
     }
@@ -254,6 +254,7 @@ void collectionMenu(){
                     PlaylistSong* selectedPlaylistSong = selectedPlaylist->songLocation; 
                     if (selectedPlaylistSong->song == selectedSong) { // if the head is the song
                         selectedPlaylist->playlist->songList = selectedPlaylistSong->next; // head set to next
+                        // can use (selectedPlaylist->songLocation) instead of (selectedPlaylist->playlist->songList)?
                     }
                     if (selectedPlaylistSong->prev != NULL) { //prev got node
                         selectedPlaylistSong->prev->next = selectedPlaylistSong->next; // prev's next to next
@@ -572,7 +573,7 @@ void playlistMenu(){
                             if (deletePlaylistName->playlist == deletePlaylist) {
                                 deleteSong->song->playlistName = deletePlaylistName->next;
                                 delete deletePlaylistName;
-                                deletePlaylistName = NULL;
+                                deletePlaylistName = NULL; // need to update? cause this pointer is created in stack
                             }
                             while (deletePlaylistName != NULL){
                                 if (deletePlaylistName->playlist == deletePlaylist) {
