@@ -174,3 +174,4 @@ dmypy.json
 cython_debug/
 test.cpp
 main
+a.out
