@@ -147,7 +147,7 @@ void displayPlaylistSong(PlaylistSong* last){ //done
     // display
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " ";
+        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << "Duration: " << last->song->getDuration();
         last = last->next;
         num++;
     }
@@ -291,8 +291,8 @@ void playlistSearch(SongCollection* head, int userSong){
     while(playlistName != NULL){
         cout << num << ". " << playlistName->playlist->getPlaylistName() << endl; 
         playlistName = playlistName->next;
+        num++;
     }
-    num++;
 }
 
 void collectionMenu(){
@@ -634,7 +634,6 @@ void playlistMenu(){
         cout << endl << endl;
     } while(option != 0);
 }
-
 
 int main(){
     int option;
