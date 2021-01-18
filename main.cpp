@@ -199,7 +199,7 @@ void displayPlaylistSong(PlaylistSong* last){ //done
     // display
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << "Duration: " << last->song->getDuration();
+        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " Duration: " << last->song->getDuration();
         last = last->next;
         num++;
     }
@@ -463,6 +463,10 @@ void playlistMenu(){
             case 3: // Add songs --finished (add to song collection) change to display able to add song?
             {
                 // display all playlist
+                if (playlist == NULL){  
+                    cout << "no playlist";
+                    break;
+                }
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
                 if (playlist->length < userPlaylist){
@@ -519,6 +523,10 @@ void playlistMenu(){
             case 5: // Remove songs --not finished (if no song, doubly, delete from song collection)
             {
                 // display all playlist
+                if (playlist == NULL){  
+                    cout << "no playlist";
+                    break;
+                }
                 displayPlaylist(playlist);
                 cin >> userPlaylist;
                 if (playlist->length < userPlaylist){

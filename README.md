@@ -8,9 +8,9 @@
 - playlist
 1. Create playlist      --
 2. View playlist        --
-3. Add songs            --not finished(add to collection, cannot add 2 song)
+3. Add songs            --not finished(cannot add 2 song)
 4. View songs           --
-5. Remove songs         --not finished(got problem, doubly, remove from collection) - failed
+5. Remove songs         --not finished(got problem, 1 remove all, 2 do nothing) - failed
 6. Playlist navigation  --not finished
 7. Delete playlist      --not finished(error if playlist has song)
 
