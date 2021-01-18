@@ -9,7 +9,7 @@ class PlaylistSong;
 class Playlist;
 
 void addSong(SongCollection** head_ref, string title, string singer, string duration);
-addPlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist, PlaylistSong* newSong);
+void addPlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist, PlaylistSong* newSong);
 void addPlaylist(Playlist** head_ref, string name);
 void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong);
 void displaySongCollection(SongCollection* last);
@@ -171,7 +171,7 @@ void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong){
         selectedPlaylistSong->next = newSong;
     }
     // add playlist name to song collection
-    addPlaylistName(&(selectedSong->playlistName));
+    addPlaylistName(&(selectedSong->playlistName), selectedPlaylist, newSong);
 }
 
 void displaySongCollection(SongCollection* last){ //done
