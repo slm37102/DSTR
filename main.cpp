@@ -9,7 +9,7 @@ class PlaylistSong;
 class Playlist;
 
 void addSong(SongCollection** head_ref, string title, string singer, string duration);
-void addPlaylistName(PlaylistName** head_ref);
+addPlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist, PlaylistSong* newSong);
 void addPlaylist(Playlist** head_ref, string name);
 void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong);
 void displaySongCollection(SongCollection* last);
