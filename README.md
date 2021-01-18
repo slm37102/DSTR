@@ -1,24 +1,24 @@
 # TODO
-- collection
+- collection - without playlist works
 1. Add songs
 2. Display songs
 3. Delete song
 4. Playlist search
 
 - playlist
-1. Create playlist      --finished(merge song?)
-2. View playlist        --finished(merge song?)
-3. Add songs            --finished(add to collection)
-4. View songs           --finished(?)
-5. Remove songs         --finished(got problem, doubly, remove from collection)
+1. Create playlist      --
+2. View playlist        --
+3. Add songs            --not finished(add to collection, cannot add 2 song)
+4. View songs           --
+5. Remove songs         --not finished(got problem, doubly, remove from collection) - failed
 6. Playlist navigation  --not finished
-7. Delete playlist      --finished(always delete last one)
+7. Delete playlist      --not finished(error if playlist has song)
 
 # Needed to add
 1. playlist search          --finished
 2. to multi music           --finished
 3. duration to mm:ss        --finished (limit second)
-4. error if exceed length   (implement length)
+4. error if exceed length   (need implement length to class)
 5. try catch
 6. doubly linked list
 7. add song to playlist
