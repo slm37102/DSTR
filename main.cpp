@@ -1,4 +1,4 @@
-#include<iostream>
+#include <iostream>
 #include <chrono>
 #include <thread>
 using namespace std;
@@ -7,6 +7,19 @@ class PlaylistName;
 class SongCollection;
 class PlaylistSong;
 class Playlist;
+
+void addSong(SongCollection** head_ref, string title, string singer, string duration);
+void addPlaylistName(PlaylistName** head_ref);
+void addPlaylist(Playlist** head_ref, string name);
+void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong);
+void displaySongCollection(SongCollection* last);
+void displayPlaylistSong(PlaylistSong* last);
+void displayPlaylist(Playlist* last);
+void deleteSong(SongCollection** head_ref, int userSong);
+void deletePlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist);
+void deletePlaylist(Playlist** head_ref, int userPlaylist);
+void deletePlaylistSong(PlaylistSong** head_ref, SongCollection* selectedSong);
+void playlistSearch(SongCollection* head, int userSong);
 
 SongCollection* song = NULL;
 Playlist* playlist = NULL;
@@ -70,7 +83,6 @@ class Playlist{
 };
 
 void addSong(SongCollection** head_ref, string title, string singer, string duration) {
-    (*head_ref)->length++;
     SongCollection* newNode = new SongCollection(title, singer, duration);
     newNode->next = NULL;
     if (*head_ref == NULL){
@@ -91,12 +103,27 @@ void addSong(SongCollection** head_ref, string title, string singer, string dura
     (*head_ref)->length++;
 }
 
-void addPlaylistName(PlaylistName** head_ref){
+void addPlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist, PlaylistSong* newSong){
+    PlaylistName* selectedPlaylistName = *head_ref;
+    PlaylistName* newPlaylistName = new PlaylistName;
+    newPlaylistName->next = NULL;
+    newPlaylistName->playlist = selectedPlaylist; //playlist location
+    newPlaylistName->songLocation = newSong; //playlist song location
+
+    if (selectedPlaylistName == NULL){
+        *head_ref = newPlaylistName;
+        (*head_ref)->length = 1;
+        return;
+    }
+    while (selectedPlaylistName->next != NULL)
+    {
+        selectedPlaylistName = selectedPlaylistName->next;
+    }
+    selectedPlaylistName->next = newPlaylistName;
     (*head_ref)->length++;
 }
 
 void addPlaylist(Playlist** head_ref, string name) {
-    (*head_ref)->length++;
     Playlist* newNode = new Playlist(name);
     newNode->next = NULL;
     if (*head_ref == NULL)
@@ -118,8 +145,33 @@ void addPlaylist(Playlist** head_ref, string name) {
     (*head_ref)->length++;
 }
 
-void addPlaylistSong(PlaylistSong** head_ref){
-    (*head_ref)->length++;
+void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong){
+    Playlist* selectedPlaylist = *head_ref;
+    PlaylistSong* selectedPlaylistSong = selectedPlaylist->songList;
+    PlaylistSong* newSong = new PlaylistSong(selectedSong);
+    newSong->next = NULL;
+    // if the playlist is empty
+    if (selectedPlaylistSong == NULL){
+        // add song to playlist
+        newSong->length = 1;
+        newSong->prev = NULL;
+        selectedPlaylist->songList = newSong;
+    } else {
+        // loop to the last song and find if have the same song
+        while (selectedPlaylistSong != NULL) {
+            // if any duplicate song
+            if (selectedPlaylistSong->song == selectedSong) {
+                cout << "The playlist has this song";
+                return;
+            }
+            selectedPlaylistSong = selectedPlaylistSong->next;
+        }
+        // append user selected song
+        newSong->prev = selectedPlaylistSong;
+        selectedPlaylistSong->next = newSong;
+    }
+    // add playlist name to song collection
+    addPlaylistName(&(selectedSong->playlistName));
 }
 
 void displaySongCollection(SongCollection* last){ //done
@@ -436,46 +488,8 @@ void playlistMenu(){
                 {
                     selectedSong = selectedSong->next;
                 }
-                PlaylistSong* newSong = new PlaylistSong(selectedSong);
-                newSong->next = NULL;
-                // if the playlist is empty
-                if (selectedPlaylist->songList == NULL){
-                    // add song to playlist
-                    newSong->prev = NULL;
-                    selectedPlaylist->songList = newSong;
-                    // add playlist name to song collection
-                    PlaylistName* playlistName = new PlaylistName;
-                    playlistName->next = NULL;
-                    playlistName->length = 1;
-                    playlistName->playlist = selectedPlaylist; //playlist location
-                    playlistName->songLocation = newSong; //playlist song location
-                    selectedSong->playlistName= playlistName;
-                    break;
-                }
-                // loop to the last song and find if have the same song
-                bool flag = false;
-                PlaylistSong *lastPlaylistSong = selectedPlaylist->songList;
-                while (lastPlaylistSong != NULL) {
-                    // if any duplicate song
-                    if (lastPlaylistSong->song == selectedSong) {
-                        flag = true;
-                        cout << "The playlist has this song";
-                        break;
-                    }
-                    lastPlaylistSong = lastPlaylistSong->next;
-                }
-                if (!flag) {
-                    // append user selected song
-                    newSong->prev = lastPlaylistSong;
-                    lastPlaylistSong->next = newSong;
-                    // add playlist name to song collection
-                    PlaylistName* playlistName = new PlaylistName;
-                    playlistName->next = NULL;
-                    playlistName->length++; 
-                    playlistName->playlist = selectedPlaylist; //playlist location
-                    playlistName->songLocation = newSong; //playlist song location
-                    selectedSong->playlistName= playlistName;
-                }
+                // add song to playlist
+                addPlaylistSong(&selectedPlaylist, selectedSong);
                 break;
             }
             case 4: // View songs -- finished (maybe?)
