@@ -158,13 +158,17 @@ void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong){
         selectedPlaylist->songList = newSong;
     } else {
         // loop to the last song and find if have the same song
-        while (selectedPlaylistSong != NULL) {
+        while (selectedPlaylistSong->next != NULL) {
             // if any duplicate song
             if (selectedPlaylistSong->song == selectedSong) {
                 cout << "The playlist has this song";
                 return;
             }
             selectedPlaylistSong = selectedPlaylistSong->next;
+        }
+        if (selectedPlaylistSong->song == selectedSong) {
+            cout << "The playlist has this song";
+            return;
         }
         // append user selected song
         newSong->prev = selectedPlaylistSong;
@@ -259,7 +263,6 @@ void deleteSong(SongCollection** head_ref, int userSong){ //done
 void deletePlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist){ //done
     (*head_ref)->length--;
     // delete the playlist name in the collection
-    (*head_ref)->length--;
     PlaylistName* deletePlaylistName = *head_ref, *prevPlaylistName;
     // find the playlist that needed to delete
     if (deletePlaylistName->playlist == selectedPlaylist) {
@@ -546,19 +549,13 @@ void playlistMenu(){
                     cout << "no such number";
                     break;
                 }
-                // loop through song
-                PlaylistSong* selectedSong, *prevSong = selectedPlaylist->songList;
-
-                if (prevSong->next == NULL){
-                    playlist = NULL;
-                } else {
-                    for (int i = 0; i < userSong - 2; i++)
-                    {
-                        prevSong = prevSong->next;
-                    }
-                    selectedSong = prevSong->next;
-                    prevSong->next = selectedSong->next;
+                SongCollection* selectedSong = song;
+                for (int i = 0; i < userSong - 1; i++)
+                {
+                    selectedSong = selectedSong->next;
                 }
+                deletePlaylistSong(&(selectedPlaylist->songList), selectedSong);
+                deletePlaylistName(&(selectedSong->playlistName), selectedPlaylist);
                 // delete song
                 delete selectedSong;
                 break;

@@ -1,16 +1,16 @@
 # TODO
-- collection - without playlist works
-1. Add songs
-2. Display songs
-3. Delete song
-4. Playlist search
+- collection
+1. Add songs            --
+2. Display songs        --
+3. Delete song          --not finished(got problem after adding in playlist)
+4. Playlist search      --
 
 - playlist
 1. Create playlist      --
 2. View playlist        --
-3. Add songs            --not finished(cannot add 2 song)
+3. Add songs            --
 4. View songs           --
-5. Remove songs         --not finished(got problem, 1 remove all, 2 do nothing) - failed
+5. Remove songs         --not finished(got problem, 1 remove all, 2 do nothing) - failed (selectedPlaylist->length < userSong)
 6. Playlist navigation  --not finished
 7. Delete playlist      --not finished(error if playlist has song)
 
