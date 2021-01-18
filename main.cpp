@@ -587,6 +587,10 @@ void playlistMenu(){
                             delete deleteSong;
                             deleteSong = temp;
                         }
+                        
+                        /* Add (?): Line 590
+                        deletePlaylist->songList = NULL;
+                        */
                     }
                     
                     /*
@@ -602,9 +606,6 @@ void playlistMenu(){
                     
                     // delete playlist
                     delete deletePlaylist;
-                    /* Add: (Line 531)
-                    deletePlaylist = NULL;
-                    */
                 }
                 break;
             }
