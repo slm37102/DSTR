@@ -18,19 +18,17 @@
 1. playlist search          --finished
 2. to multi music           --finished
 3. duration to mm:ss        --finished (limit second)
-4. error if exceed length   (need implement length to class)
-5. try catch
-6. doubly linked list
-7. add song to playlist
-
+4. error if exceed length   --TODO
+5. try catch                --TODO
+6. doubly linked list       --finished
 
 # additional feature
-- menu              --finished
-- database
-- shuffle
-- countdown
-- queue on playlist
-- doubly linked list to able to have prev music 
+- menu                --finished
+- database            --can try if got time
+- shuffle             --can try if got time
+- countdown           --TODO
+- queue on playlist   --may not needed
+- doubly linked list  --finished
 
 # data sturcture
 - playlist
