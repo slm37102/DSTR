@@ -21,6 +21,7 @@
 4. error if exceed length   --TODO
 5. try catch                --TODO
 6. doubly linked list       --finished
+7. no same song and playlist name
 
 # additional feature
 - menu                --finished

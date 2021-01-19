@@ -49,4 +49,3 @@ ANS: Nonid. Because we put the if statement behind is because the while loop can
 11. all the delete got the length problem i yesterday solve but didn't save..
 argghh i yesterday midnight did a bit of debug but didn't save...
 
-12. make deletePlaylist 

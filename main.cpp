@@ -11,7 +11,7 @@ class Playlist;
 void addSong(SongCollection** head_ref, string title, string singer, string duration);
 void addPlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist, PlaylistSong* newSong);
 void addPlaylist(Playlist** head_ref, string name);
-void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong);
+void addPlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong);
 void displaySongCollection(SongCollection* last);
 void displayPlaylistSong(PlaylistSong* last);
 void displayPlaylist(Playlist* last);
@@ -151,8 +151,7 @@ void addPlaylist(Playlist** head_ref, string name) {
     (*head_ref)->length++;
 }
 
-void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong){
-    Playlist* selectedPlaylist = *head_ref;
+void addPlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong){
     PlaylistSong* selectedPlaylistSong = selectedPlaylist->songList;
     PlaylistSong* newSong = new PlaylistSong(selectedSong);
     newSong->next = NULL;
@@ -185,7 +184,7 @@ void addPlaylistSong(Playlist** head_ref, SongCollection* selectedSong){
     addPlaylistName(&(selectedSong->playlistName), selectedPlaylist, newSong);
 }
 
-void displaySongCollection(SongCollection* last){ //done
+void displaySongCollection(SongCollection* last){ 
     // if no song inside
     if(last == NULL){
         cout << "The collection is empty!";
@@ -201,7 +200,7 @@ void displaySongCollection(SongCollection* last){ //done
     cout << endl;
 }
 
-void displayPlaylistSong(PlaylistSong* last){ //done
+void displayPlaylistSong(PlaylistSong* last){ 
     // if no song inside
     if(last == NULL){
         cout << "The Playlist is empty!";
@@ -217,7 +216,7 @@ void displayPlaylistSong(PlaylistSong* last){ //done
     cout << endl;
 }
 
-void displayPlaylist(Playlist* last){ //done
+void displayPlaylist(Playlist* last){ 
     // if no song inside
     if(last == NULL){
         cout << "There is no playlist!";
@@ -237,13 +236,15 @@ void displayPlaylist(Playlist* last){ //done
     cout << endl;
 } 
 
-void deleteSong(SongCollection** head_ref, int userSong){ //done
-    (*head_ref)->length--;
+void deleteSong(SongCollection** head_ref, int userSong){ 
      // loop to the selected song
     SongCollection *prevSong, *selectedSong = *head_ref;
     if (userSong == 1) // if user choose the first song
     {
         *head_ref = selectedSong->next;
+        if(*head_ref != NULL) {
+            (*head_ref)->length--;
+        }
     } 
     else // more then one song
     {
@@ -264,32 +265,34 @@ void deleteSong(SongCollection** head_ref, int userSong){ //done
         selectedPlaylistName = temp;
     }
     // delete the songs
+    (*head_ref)->length--;
     delete selectedSong;
 }
 
-void deletePlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist){ //done
-    (*head_ref)->length--;
+void deletePlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist){ 
     // delete the playlist name in the collection
     PlaylistName* deletePlaylistName = *head_ref, *prevPlaylistName;
-    // find the playlist that needed to delete
+    // if the head is the playlist
     if (deletePlaylistName->playlist == selectedPlaylist) {
         *head_ref = deletePlaylistName->next;
-        delete deletePlaylistName;
-        return;
+    } else {
+        // find the playlist that needed to delete
+        while (deletePlaylistName != NULL){
+            if (deletePlaylistName->playlist == selectedPlaylist) {
+                prevPlaylistName->next = deletePlaylistName->next;
+                break;
+            } 
+            prevPlaylistName = deletePlaylistName;
+            deletePlaylistName = deletePlaylistName->next;
+        }
     }
-    while (deletePlaylistName != NULL){
-        if (deletePlaylistName->playlist == selectedPlaylist) {
-            prevPlaylistName->next = deletePlaylistName->next;
-            delete deletePlaylistName;
-            return;
-        } 
-        prevPlaylistName = deletePlaylistName;
-        deletePlaylistName = deletePlaylistName->next;
+    if(*head_ref != NULL) {
+        (*head_ref)->length--;
     }
+    delete deletePlaylistName;
 }
 
-void deletePlaylist(Playlist** head_ref, int userPlaylist){ //done
-    (*head_ref)->length--;
+void deletePlaylist(Playlist** head_ref, int userPlaylist){ 
     Playlist* prevNode, *selectedPlaylist = *head_ref;
     if (userPlaylist == 1) 
     { 
@@ -316,10 +319,13 @@ void deletePlaylist(Playlist** head_ref, int userPlaylist){ //done
         delete deleteSong;
         deleteSong = temp;
     }
+    if(*head_ref != NULL) {
+        (*head_ref)->length--;
+    }
     delete selectedPlaylist;
 }
 
-void deletePlaylistSong(PlaylistSong** head_ref, SongCollection* selectedSong){ //done
+void deletePlaylistSong(PlaylistSong** head_ref, SongCollection* selectedSong){ 
     PlaylistSong* selectedPlaylistSong = *head_ref;
     if (selectedPlaylistSong->song == selectedSong) { // if the head is the song
         *head_ref = selectedPlaylistSong->next; // head set to next
@@ -330,7 +336,9 @@ void deletePlaylistSong(PlaylistSong** head_ref, SongCollection* selectedSong){ 
     if (selectedPlaylistSong->next != NULL) { //next got node
         selectedPlaylistSong->next->prev = selectedPlaylistSong->prev; // next's prev to prev
     }
-    (*head_ref)->length--;
+    if(*head_ref != NULL) {
+        (*head_ref)->length--;
+    }
     delete selectedPlaylistSong;
 }
 
@@ -502,7 +510,7 @@ void playlistMenu(){
                     selectedSong = selectedSong->next;
                 }
                 // add song to playlist
-                addPlaylistSong(&selectedPlaylist, selectedSong);
+                addPlaylistSong(selectedPlaylist, selectedSong);
                 break;
             }
             case 4: // View songs -- finished (maybe?)
@@ -663,6 +671,18 @@ void playlistMenu(){
 int main(){
     int option;
     do{
+        // test case
+        addSong(&song, "1", "1", "1");
+        addSong(&song, "2", "2", "2");
+        addSong(&song, "3", "3", "3");
+        addPlaylist(&playlist, "1");
+        addPlaylist(&playlist, "2");
+        addPlaylist(&playlist, "3");
+        addPlaylistSong(playlist, song);
+        addPlaylistSong(playlist, song->next);
+        addPlaylistSong(playlist, song->next->next);
+        addPlaylistSong(playlist->next, song->next);
+        // test end here
         // system("cls");
         cout << "Main Menu" << endl;
         cout << "1. Collection" << endl;
