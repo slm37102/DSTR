@@ -273,7 +273,8 @@ void CollectionMenu(SongCollection* song)
 		{
 			case 0:
 				break;
-
+			
+			// CHECK HERE:
 			case 1:
 				cout << "Title: ";
 				cin.ignore();
@@ -286,6 +287,7 @@ void CollectionMenu(SongCollection* song)
 				cout << "Duration (mm:ss): ";
 				getline(cin, duration);
 				
+			// ENDS HERE:
 
 				addSong(&song, title, singer, duration);
 				cout << endl;
