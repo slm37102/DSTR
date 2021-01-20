@@ -375,12 +375,11 @@ void deletePlaylist(Playlist** head_ref, int userPlaylist){
 //for delete song in collection
 void deletePlaylistSong(PlaylistName* selectedPlaylistName, SongCollection* selectedSong){ 
     // head_ref = selectedPlaylistName->playlist
-    Playlist* selectedPlaylist = selectedPlaylistName->playlist;
-    PlaylistSong* selectedPlaylistSong = selectedPlaylistName->songLocation;
+    PlaylistSong* selectedPlaylistSong = selectedPlaylistName->playlist->songList;
     if (selectedPlaylistSong->song == selectedSong) { // if the head is the song
-        selectedPlaylistName->songLocation = selectedPlaylistSong->next; // head set to next
-        if(selectedPlaylistName->songLocation != NULL) {
-            selectedPlaylistName->songLocation->length = selectedPlaylistSong->length;
+        selectedPlaylistName->playlist->songList = selectedPlaylistSong->next; // head set to next
+        if(selectedPlaylistName->playlist->songList != NULL) {
+            selectedPlaylistName->playlist->songList->length = selectedPlaylistSong->length;
         }
     }
     if (selectedPlaylistSong->prev != NULL) { //prev got node
@@ -389,8 +388,8 @@ void deletePlaylistSong(PlaylistName* selectedPlaylistName, SongCollection* sele
     if (selectedPlaylistSong->next != NULL) { //next got node
         selectedPlaylistSong->next->prev = selectedPlaylistSong->prev; // next's prev to prev
     }
-    if(selectedPlaylistName->songLocation != NULL) {
-        selectedPlaylistName->songLocation->length--;
+    if(selectedPlaylistName->playlist->songList != NULL) {
+        selectedPlaylistName->playlist->songList->length--;
     }
     delete selectedPlaylistSong;
 }
@@ -665,10 +664,10 @@ void playlistMenu(){
                 {
                     selectedSong = selectedSong->next;
                 }
+                // delete song in the playlist - no prob
                 deletePlaylistSong(selectedPlaylist, selectedSong);
+                // delete playlistName in song collection 
                 deletePlaylistName(selectedSong, selectedPlaylist);
-                // delete song
-                delete selectedSong;
                 break;
             }
             case 6: // Playlist navigation --not finished ?????
