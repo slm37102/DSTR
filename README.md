@@ -22,6 +22,8 @@
 5. try catch                --TODO
 6. doubly linked list       --finished
 7. no same song and playlist name
+8. getline to store space
+9. add attribute durationInS to the song collection?
 
 # Additional feature
 - menu                --finished

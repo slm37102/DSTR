@@ -16,7 +16,7 @@ class PlaylistSong;
 class Playlist;
 
 void addSong(SongCollection** head_ref, string title, string singer, string duration);
-void addPlaylistName(PlaylistName** head_ref, Playlist* selectedPlaylist, PlaylistSong* newSong);
+void addPlaylistName(SongCollection* selectedSong, Playlist* selectedPlaylist, PlaylistSong* newSong);
 void addPlaylist(Playlist** head_ref, string name);
 void addPlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong);
 void displaySongCollection(SongCollection* last);
@@ -247,7 +247,7 @@ void displayPlaylist(Playlist* last){
 
 void deleteSong(SongCollection** head_ref, int userSong){ 
      // loop to the selected song
-    SongCollection *prevSong, *selectedSong = *head_ref;
+    SongCollection *prevSong = NULL, *selectedSong = *head_ref;
     if (userSong == 1) // if user choose the first song
     {
         *head_ref = selectedSong->next;
@@ -284,7 +284,7 @@ void deleteSong(SongCollection** head_ref, int userSong){
 void deletePlaylistName(PlaylistSong* deleteSong, Playlist* selectedPlaylist){ 
     // head_ref = deleteSong->song->playlistName
     // delete the playlist name in the collection
-    PlaylistName* deletePlaylistName = deleteSong->song->playlistName, *prevPlaylistName;
+    PlaylistName* deletePlaylistName = deleteSong->song->playlistName, *prevPlaylistName = NULL;
     // if the head is the playlist
     if (deletePlaylistName->playlist == selectedPlaylist) {
         deleteSong->song->playlistName = deletePlaylistName->next;
@@ -312,7 +312,7 @@ void deletePlaylistName(PlaylistSong* deleteSong, Playlist* selectedPlaylist){
 void deletePlaylistName(SongCollection* selectedSong, Playlist* selectedPlaylist){ 
     // head_ref = selectedSong->playlistName
     // delete the playlist name in the collection
-    PlaylistName* deletePlaylistName = selectedSong->playlistName, *prevPlaylistName;
+    PlaylistName* deletePlaylistName = selectedSong->playlistName, *prevPlaylistName = NULL;
     // if the head is the playlist
     if (deletePlaylistName->playlist == selectedPlaylist) {
         selectedSong->playlistName = deletePlaylistName->next;
@@ -337,7 +337,7 @@ void deletePlaylistName(SongCollection* selectedSong, Playlist* selectedPlaylist
 }
 
 void deletePlaylist(Playlist** head_ref, int userPlaylist){ 
-    Playlist* prevNode, *selectedPlaylist = *head_ref;
+    Playlist* prevNode = NULL, *selectedPlaylist = *head_ref;
     if (userPlaylist == 1) 
     { 
         *head_ref = selectedPlaylist->next;
@@ -463,6 +463,16 @@ void collectionMenu(){
                 cin >> singer;
                 cout << "Duration (mm:ss): ";
                 cin >> duration;
+                int m, s;
+                if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1) {
+                    if (s >= 60){
+                        cout << "second over 60";
+                        break;
+                    }
+                } else {
+                    cout << "format not right";
+                    break;
+                }
                 addSong(&song ,title, singer, duration);
                 break;
             }
@@ -694,8 +704,9 @@ void playlistMenu(){
                 string duration = selectedSong->song->getDuration();
                 int m, s;
                 // duration to seconds
-                sscanf(duration.c_str(), "%d:%d", &m, &s);
-                s += m * 60;
+                if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                    s += m * 60;
+                }
                 // display countdown
                 for (countdown; countdown < s && selectedSong != NULL && !stop; countdown+=int(play))
                 {
@@ -720,8 +731,9 @@ void playlistMenu(){
                     //                 title = selectedSong->song->getTitle();
                     //                 singer = selectedSong->song->getSinger();
                     //                 duration = selectedSong->song->getDuration();
-                    //                 sscanf(duration.c_str(), "%d:%d", &m, &s);
-                    //                 s += m * 60;
+                    //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                    //                     s += m * 60;
+                    //                 }
                     //                 countdown = 0;
                     //             }
                     //             break;
@@ -734,8 +746,9 @@ void playlistMenu(){
                     //                 title = selectedSong->song->getTitle();
                     //                 singer = selectedSong->song->getSinger();
                     //                 duration = selectedSong->song->getDuration();
-                    //                 sscanf(duration.c_str(), "%d:%d", &m, &s);
-                    //                 s += m * 60;
+                    //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                    //                     s += m * 60;
+                    //                 }
                     //                 countdown = 0;
                     //             }
                     //             break;
@@ -746,14 +759,15 @@ void playlistMenu(){
                     // sleep for 1 sec for linux
                     std::this_thread::sleep_for(chrono::seconds(1));
                     // // sleep for Windows
-                    // Sleep(1000)
+                    // Sleep(1000);
                     if (countdown == s - 1) {
                         selectedSong = selectedSong->next;
                         title = selectedSong->song->getTitle();
                         singer = selectedSong->song->getSinger();
                         duration = selectedSong->song->getDuration();
-                        sscanf(duration.c_str(), "%d:%d", &m, &s);
-                        s += m * 60;
+                        if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                            s += m * 60;
+                        }
                         countdown = 0;
                     }
                 }
