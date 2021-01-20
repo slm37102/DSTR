@@ -1,4 +1,4 @@
-# TODO
+# Function
 - collection
 1. Add songs            --
 2. Display songs        --
@@ -23,7 +23,7 @@
 6. doubly linked list       --finished
 7. no same song and playlist name
 
-# additional feature
+# Additional feature
 - menu                --finished
 - database            --can try if got time
 - shuffle             --can try if got time
@@ -31,7 +31,7 @@
 - queue on playlist   --may not needed
 - doubly linked list  --finished
 
-# data sturcture
+# Data sturcture
 - playlist
 ```
 playlist -> playlist -> playlist
@@ -54,6 +54,30 @@ playlist    playlist    playlist
     V           V           V
 playlist    playlist    playlist
 ```
+# Classes
+1. PlaylistName
+- length 
+- Playlist (Playlist)
+- song location (SC)
+- next
+
+2. SongCollection
+- song detail (t,s,d)
+- length
+- playlistName (PN)
+- next
+
+3. PlaylistSong
+- length
+- song (SC)
+- prev
+- next
+
+4. Playlist
+- playlistName (string)
+- length 
+- next 
+- songList (PlaylistSong)
 
 # Requirement
 - add song to collection
@@ -63,7 +87,7 @@ playlist    playlist    playlist
 - can only add song from collection
 - one song add to many playlist
 
-# detail of TODO
+# Detail of function
 - collection
 1. Add songs – Add a song, with appropriate information, into the songs collection.
 2. Display songs – Display all songs available in the collection
@@ -79,27 +103,3 @@ properly updated.
 5. Remove songs – Remove a song from a particular playlist.
 6. Playlist navigation – Navigating a particular playlist.
 7. Delete playlist – Delete a particular playlist.
-
-PlaylistName
-- length 
-- Playlist (Playlist)
-- song location (SC)
-- next
-
-SongCollection
-- song detail (t,s,d)
-- length
-- playlistName (PN)
-- next
-
-PlaylistSong
-- length
-- song (SC)
-- prev
-- next
-
-Playlist
-- playlistName (string)
-- length 
-- next 
-- songList (PlaylistSong)

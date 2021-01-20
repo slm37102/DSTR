@@ -15,7 +15,8 @@
 4. <= userSong instead of < userSong? because when length = 1 and userSong = 1, then how?
    <= userPlaylist instead of < userPlaylist?
 
-- yes, solved
+- ~~yes, solved~~
+- no it actually is display no such song in playlist so no need include that. 
 
 5. addPlaylistSong() if (selectedPlaylistSong->song == selectedSong) move in front of while (selectedPlaylistSong->next != NULL) ? 
 ANS: Nonid. Because we put the if statement behind is because the while loop cannot check whether the last song in playlist
@@ -49,3 +50,7 @@ ANS: Nonid. Because we put the if statement behind is because the while loop can
 11. all the delete got the length problem i yesterday solve but didn't save..
 argghh i yesterday midnight did a bit of debug but didn't save...
 
+- done
+
+12. deleteplaylistsong and deleteplaylistName got problem
+after deleteplaylistsong 
