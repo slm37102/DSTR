@@ -54,3 +54,5 @@ argghh i yesterday midnight did a bit of debug but didn't save...
 
 12. deleteplaylistsong and deleteplaylistName got problem
 after deleteplaylistsong 
+
+- solved

@@ -456,12 +456,13 @@ void collectionMenu(){
                 break;
             case 1: //Add song
             {
+                cin.ignore();
                 cout << "Title: ";
-                cin >> title;
+                getline(cin, title);
                 cout << "Singer: ";
-                cin >> singer;
+                getline(cin, singer);
                 cout << "Duration (mm:ss): ";
-                cin >> duration;
+                getline(cin, duration);
                 int m, s;
                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1) {
                     if (s >= 60){
@@ -549,7 +550,8 @@ void playlistMenu(){
                 break;
             case 1: // Create playlist --finished (?)
             {
-                cin >> playlistName;
+                cin.ignore();
+                getline(cin, playlistName);
                 addPlaylist(&playlist, playlistName);
                 break;
             }
@@ -701,6 +703,7 @@ void playlistMenu(){
                 string title = selectedSong->song->getTitle();
                 string singer = selectedSong->song->getSinger();
                 string duration = selectedSong->song->getDuration();
+                char chars[] = { '-', '\\', '|', '/', '-' };
                 int m, s;
                 // duration to seconds
                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
@@ -753,12 +756,16 @@ void playlistMenu(){
                     //             break;
                     //     }
                     // }
-                    cout << "Now playing: " << title << " - "<< singer << "\tDuration: ";
-                    cout << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << " / " << duration << "\r" << flush;
-                    // sleep for 1 sec for linux
-                    std::this_thread::sleep_for(chrono::seconds(1));
-                    // // sleep for Windows
-                    // Sleep(1000);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        cout << "Now playing: " << title << " - "<< singer << "   " << chars[i % sizeof(chars)];
+                        cout << "   Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << " / " << duration;
+                        cout << "\r" << flush; 
+                        // sleep for 1 sec for linux
+                        this_thread::sleep_for(chrono::milliseconds(100));
+                        // // sleep for Windows
+                        // Sleep(100);
+                    }
                     if (countdown == s - 1) {
                         selectedSong = selectedSong->next;
                         title = selectedSong->song->getTitle();
