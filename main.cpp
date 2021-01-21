@@ -100,9 +100,13 @@ void addSong(SongCollection** head_ref, string title, string singer, string dura
         return;
     }
     SongCollection* last = *head_ref;
+    // first not yet check
+    if (last->getTitle() == title && last->getSinger() == singer) {
+        cout << "Song with this singer exist.";
+        return;
+    }
     while(last->next != NULL){
-        if (last->getTitle() == title && last->getSinger() == singer)
-        {
+        if (last->getTitle() == title && last->getSinger() == singer) {
             cout << "Song with this singer exist.";
             return;
         }
@@ -226,7 +230,7 @@ void displayPlaylistSong(PlaylistSong* last){
 }
 
 void displayPlaylist(Playlist* last){ 
-    // if no song inside
+    // if user haven't create any playlists
     if(last == NULL){
         cout << "There is no Playlist created, Please Create Playlist First";
         return;
@@ -280,7 +284,7 @@ void deleteSong(SongCollection** head_ref, int userSong){
     delete selectedSong;
 }
 
-// delete song in song collection 
+//to update song nodes that contain the playlist to be deleted
 void deletePlaylistName(PlaylistSong* deleteSong, Playlist* selectedPlaylist){ 
     // head_ref = deleteSong->song->playlistName
     // delete the playlist name in the collection
@@ -410,6 +414,7 @@ void deletePlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong
     if (selectedPlaylistSong->next != NULL) { //next got node
         selectedPlaylistSong->next->prev = selectedPlaylistSong->prev; // next's prev to prev
     }
+    // head_ref != NULL
     if(selectedPlaylist->songList != NULL) {
         selectedPlaylist->songList->length--;
     }
@@ -465,7 +470,7 @@ void collectionMenu(){
                 cout << "Enter Duration of the song (mm:ss): ";
                 getline(cin, duration);
                 int m, s;
-                if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1) {
+                if (sscanf(duration.c_str(), "%d:%d", &m, &s) == 2) {
                     if (s >= 60){
                         cout << "The second in the duration over 60";
                         break;
@@ -653,25 +658,25 @@ void playlistMenu(){
                 // if no song in collection
                 if (song == NULL) 
                 {
-                    cout << "There is no Song in Song Collection. Please create Song in Song Collection";
+                    cout << "There is no Song in Playlist. Please add Song in Playlist";
                     break;
                 }
                 // display songs in playlist
                 displayPlaylistSong(selectedPlaylist->songList);
                 cin >> userSong;
-                if (selectedPlaylist->length < userSong){
+                if (selectedPlaylist->songList->length < userSong){
                     cout << "Invalid Input";
                     break;
                 }
-                SongCollection* selectedSong = song;
+                PlaylistSong* selectedPlaylistSong = selectedPlaylist->songList;
                 for (int i = 0; i < userSong - 1; i++)
                 {
-                    selectedSong = selectedSong->next;
+                    selectedPlaylistSong = selectedPlaylistSong->next;
                 }
-                // delete song in the playlist - no prob
-                deletePlaylistSong(selectedPlaylist, selectedSong);
+                // delete song in the playlist
+                deletePlaylistSong(selectedPlaylist, selectedPlaylistSong->song);
                 // delete playlistName in song collection 
-                deletePlaylistName(selectedSong, selectedPlaylist);
+                deletePlaylistName(selectedPlaylistSong, selectedPlaylist);
                 break;
             }
             case 6: // Playlist navigation
@@ -731,7 +736,7 @@ void playlistMenu(){
                     //             break;
                     //         // next song
                     //         case 'n':
-                    //             if (selectedSong->prev != NULL){
+                    //             if (selectedSong->next != NULL){
                     //                 selectedSong = selectedSong->next;
                     //                 title = selectedSong->song->getTitle();
                     //                 singer = selectedSong->song->getSinger();

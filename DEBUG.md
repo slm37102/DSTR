@@ -62,30 +62,30 @@ after deleteplaylistsong
 Why need (*head_ref)->length = selectedPlaylist->length? straight away (*head_ref)->length-- jiu ok le ma not?
 Is it because you only store the length in the head_ref there? since the head_ref change, now the length data is lost?
 
-
+- so our length is mainly save in the head, so if head is delete so we need to save the head length to the next one which is the head now.
 
 2. deletePlaylistSong() for Collection
 Why need if(selectedPlaylistName->playlist->songList != NULL) 2 times? 
 Since the length will always need to minus de, so, the second if{} why not remove it and just remain the (selectedPlaylistName->playlist->songList->length--)?
 
-
+- same as 1. or else the length will be delete.
 
 3. this->song = song;'this' refer to the playlistSong class obj created by this constructor?
 
-
+- the this is refer to the variable/attribute(?) of the class, because the variable name is the same so it need to have a key work to say which variable is which
 
 4. addSong()
 add another if{} statement after while loop? Cause while loop using 'last->next' will break b4 checking for the title & singer of the last song. 
 
-
+- ya, true i changed 
 
 5. addPlaylistSong() - Can use (selectedPlaylist->songList->length++) instead of (newSong->length = 1) ? Cause we want to direct affect **head_ref not ma?
 
-
+- cannot cos when it is initialize it has no value inside one.
 
 6. displayPlaylist() - (// if no song inside) change to (// if user haven't create any playlists)
 
-
+- ok done
 
 7. PlaylistMenu(), case 5:
 why: 
@@ -97,14 +97,15 @@ SongCollection* selectedSong = song;
 
 Memory address of the song in the song collection is the same as memory address of the song in the playlist meh? Should be selectedPlaylist->songList 才对 not ma?
 
-
+- oh ya good spot
 
 8. deletePlaylistName(PlaylistSong...) - (//delete song in song collection) change (//to update song nodes that contain the playlist to be deleted)
 
+- ok
 
 9. For duration, sscanf will return an int, that int is the number of item that has been read and return -1 when error. So, change if(sscanf(...) == 2), more accurate?
 
-
+- hmmm ya it make sense because i saw this implementation online so i didnt like think about it, but oh it still have problem when it type like 1:11:11, it will still able to be added...
 
 10. playlistMenu(), case 5:
 since we are deleting songs, why need check the song collection (using the if statement)? Because we are not adding song.
@@ -112,7 +113,9 @@ since we are deleting songs, why need check the song collection (using the if st
 if (selectedPlaylist->length < userSong) should change to (selectedPlaylist->songList->length) 才对 not ma?
 Cause we are checking the length of selectedPlaylist 的 songList not the playlist class itself 的 length 啊
 
-
+- ya true same as the problem as 7. last time me too confuse on this part ba haha
 
 11. PlaylistMenu(), case 6, case 'n',
 The if{} statement should check (selectedSong->next) instead of (selectedSong->prev) not ma? Cause it is checking for next song.  
+
+- ya haha copy forgot change
