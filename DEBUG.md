@@ -95,7 +95,7 @@ Memory address of the song in the song collection is the same as memory address 
 since we are deleting songs, why need check the song collection (using the if statement)? Because we are not adding song.
 
 if (selectedPlaylist->length < userSong) should change to (selectedPlaylist->songList->length) 才对 not ma?
-Cause we are checking the length of selectedPlaylist 的 songList not the selectedPlaylist itself.
+Cause we are checking the length of selectedPlaylist 的 songList not the playlist class itself 的 length 啊
 
 11. PlaylistMenu(), case 6, case 'n',
 The if{} statement should check (selectedSong->next) instead of (selectedSong->prev) not ma? Cause it is checking for next song.  
