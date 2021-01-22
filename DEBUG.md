@@ -143,4 +143,4 @@ But the last if{} to minus the length, just before the 'delete' keyword there, w
 
 - But you 没有 update the **head_ref 的 length ah, you just update the new song 的 length only. Actually the 'length' is stored at **head_ref at stack or the first node in heap de? Or u mean using **head_ref 来 access the 'length' data of the whole linked list stored in first node in heap?
 
-- Then for (selectedPlaylistSong->song != selectedSong) de time, you straight away 'selectedPlaylist->songList->length++' is actually using **head_ref to access the 'length' of entire linked list stored in the first node then add the 'length' by 1?
+- Simialr to deletePlaylistSong() 的 while (selectedPlaylistSong->song != selectedSong) de time, you straight away 'selectedPlaylistName->playlist->songList->length--' is actually using **head_ref to access the 'length' of entire linked list stored in the first node then add its 'length' by 1?
