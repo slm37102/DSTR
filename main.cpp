@@ -1,4 +1,6 @@
 #include <iostream>
+// for padding
+#include <iomanip>
 // sleep for linux
 #include <chrono>
 #include <thread>
@@ -6,8 +8,6 @@
 // #include <conio.h>
 // // sleep for Windows
 // #include <Windows.h>
-// for padding
-#include <iomanip>
 using namespace std;
 
 class PlaylistName;
@@ -385,6 +385,10 @@ void deletePlaylistSong(PlaylistName* selectedPlaylistName, SongCollection* sele
         if(selectedPlaylistName->playlist->songList != NULL) {
             selectedPlaylistName->playlist->songList->length = selectedPlaylistSong->length;
         }
+    } else {
+        while (selectedPlaylistSong->song != selectedSong) {
+            selectedPlaylistSong = selectedPlaylistSong->next;
+        }
     }
     if (selectedPlaylistSong->prev != NULL) { //prev got node
         selectedPlaylistSong->prev->next = selectedPlaylistSong->next; // prev's next to next
@@ -399,15 +403,15 @@ void deletePlaylistSong(PlaylistName* selectedPlaylistName, SongCollection* sele
 }
 
 //for delete song in playlist
-void deletePlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong){ 
+void deletePlaylistSong(Playlist* selectedPlaylist, PlaylistSong* selectedPlaylistSong){ 
     // head_ref = selectedPlaylist->songList
-    PlaylistSong* selectedPlaylistSong = selectedPlaylist->songList;
-    if (selectedPlaylistSong->song == selectedSong) { // if the head is the song
+    if (selectedPlaylist->songList->song == selectedPlaylistSong->song) { // if the head is the song
         selectedPlaylist->songList = selectedPlaylistSong->next; // head set to next
         if(selectedPlaylist->songList != NULL) {
             selectedPlaylist->songList->length = selectedPlaylistSong->length;
         }
     }
+    // no need to loop because the selected playlist song is already looped before passing
     if (selectedPlaylistSong->prev != NULL) { //prev got node
         selectedPlaylistSong->prev->next = selectedPlaylistSong->next; // prev's next to next
     }
@@ -656,7 +660,7 @@ void playlistMenu(){
                     selectedPlaylist = selectedPlaylist->next;
                 }
                 // if no song in collection
-                if (song == NULL) 
+                if (selectedPlaylist->songList == NULL) 
                 {
                     cout << "There is no Song in Playlist. Please add Song in Playlist";
                     break;
@@ -674,7 +678,7 @@ void playlistMenu(){
                     selectedPlaylistSong = selectedPlaylistSong->next;
                 }
                 // delete song in the playlist
-                deletePlaylistSong(selectedPlaylist, selectedPlaylistSong->song);
+                deletePlaylistSong(selectedPlaylist, selectedPlaylistSong);
                 // delete playlistName in song collection 
                 deletePlaylistName(selectedPlaylistSong, selectedPlaylist);
                 break;

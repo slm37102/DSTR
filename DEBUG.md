@@ -124,9 +124,19 @@ The if{} statement should check (selectedSong->next) instead of (selectedSong->p
 1. playlistMenu(), case 5:
 Since we are deleting songs from playlist, why need (if song == NULL) statement? We are not adding songs right? 而且我们要的是user selected playlist 里面的 song 不是吗?
 
+- yup is selectedPlaylist->songList
+
 2. same as yesterday de '2', I mean the 2nd if{} statement ah, need meh? Cause the first if{} is to assign back the length to the **head_ref, this I know. 
 But the last if{} to minus the length, just before the 'delete' keyword there, why is it needed? Cause confirm is != NULL 的不是吗? Let's say selectedPlaylistSong got 1 song then after update **head_ref = selectedPlaylistSong->next, it will equal to NULL. Then no need to update the length ady. But if selectedPlaylistSong got more than 1 song, we delete first song again and update **head_Ref = selectedPlaylistSong->next. Now, because update **head_ref de part we ady check != NULL to update it right? So at the bottom there, straight away length-- jiu ok le ma not? 而且, If we want to delete de is not the first song, then confirm **head_ref is != NULL not ma, it is pointing to the first song ah.
 
+- cos oh if *head_ref == NULL oh it cannot access the length it will have error because it have nothing inside. the "last if statement" is only to solve the problem of cannot access the NULL. 
+
 3. deletePlaylistSong() both - if the head is not the song, then how? Cause there is no looping for selectedPlaylistSong ah. So need to put a loop?
 
+- ~cos we alr loop outside b4 we pass the head inside~
+- oh cos i change the function, previously i loop to the song and pass to the function. ok i solved it
+- for the playlist one still no need loop because it alr loop b4 passing. 
+
 4. same as yesterday de '5', if we assign length = 1 to the newNode, then the **head_ref de length will also become 1? Cause if playlistSong is not empty then I see you is directly affect **head_ref by minus its length ah. So if assign length = 1 to the newNode, then actually the **head_ref->length in the stack there is still 0 de not?
+
+- oh both same der user *head_ref->length or add length to new song b4 add to the head also can one, but not add to head then add length to the node. yesterday '5' is add length one der leh haha. i a bit not clear about the question maybe later u ask again. 
