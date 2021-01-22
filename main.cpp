@@ -375,7 +375,6 @@ void deletePlaylist(Playlist** head_ref, int userPlaylist){
     }
     delete selectedPlaylist;
 }
-
 //for delete song in collection
 void deletePlaylistSong(PlaylistName* selectedPlaylistName, SongCollection* selectedSong){ 
     // head_ref = selectedPlaylistName->playlist
