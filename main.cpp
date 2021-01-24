@@ -787,6 +787,14 @@ void playlistMenu(){
                 string title = selectedSong->song->getTitle();
                 string singer = selectedSong->song->getSinger();
                 string duration = selectedSong->song->getDuration();
+                string prevSongName = "-";
+                string nextSongName;
+                if (selectedSong->next != NULL) {
+                    nextSongName = selectedSong->next->song->getTitle();
+                }
+                else {
+                    nextSongName = "-";
+                }                
                 char chars[] = { '-', '\\', '|', '/', '-' };
                 int m, s;
                 // duration to seconds
@@ -798,51 +806,64 @@ void playlistMenu(){
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                    // // uncomment Windows
-                    // // if key is press
-                    // if (_kbhit()) {
-                    //     switch (_getch())
-                    //     {
-                    //         // play/pause
-                    //         case 'p':
-                    //         case 'P':
-                    //             play = !play;
-                    //             break;
-                    //         // stop
-                    //         case 's':
-                    //         case 'S':
-                    //             stop = true;
-                    //             break;
-                    //         // next song
-                    //         case 'n':
-                    //         case 'N':
-                    //             if (selectedSong->next != NULL){
-                    //                 selectedSong = selectedSong->next;
-                    //                 title = selectedSong->song->getTitle();
-                    //                 singer = selectedSong->song->getSinger();
-                    //                 duration = selectedSong->song->getDuration();
-                    //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
-                    //                     s += m * 60;
-                    //                 }
-                    //                 countdown = 0;
-                    //             }
-                    //             break;
-                    //         // previous song
-                    //         case 'b':
-                    //         case 'B':
-                    //             if (selectedSong->prev != NULL){
-                    //                 selectedSong = selectedSong->prev;
-                    //                 title = selectedSong->song->getTitle();
-                    //                 singer = selectedSong->song->getSinger();
-                    //                 duration = selectedSong->song->getDuration();
-                    //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
-                    //                     s += m * 60;
-                    //                 }
-                    //                 countdown = 0;
-                    //             }
-                    //             break;
-                    //         }
-                    //     }
+                        // // uncomment Windows
+                        // // if key is press
+                        // if (_kbhit()) {
+                        //     switch (_getch()){
+                        //         // play/pause
+                        //         case 'p':
+                        //         case 'P':
+                        //             play = !play;
+                        //             break;
+                        //         // stop
+                        //         case 's':
+                        //         case 'S':
+                        //             stop = true;
+                        //             break;
+                        //         // next song
+                        //         case 'n':
+                        //         case 'N':
+                        //             if (selectedSong->next != NULL){
+                        //                 prevSongName = title;
+                        //                 selectedSong = selectedSong->next;
+                        //                 title = selectedSong->song->getTitle();
+                        //                 singer = selectedSong->song->getSinger();
+                        //                 duration = selectedSong->song->getDuration();
+                        //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                        //                     s += m * 60;
+                        //                 }
+                        //                 countdown = 0;
+                        //                 if (selectedSong->next != NULL) {
+                        //                     nextSongName = selectedSong->next->song->getTitle();
+                        //                 }
+                        //                 else {
+                        //                     nextSongName = "-";
+                        //                 }     
+                        //             }
+                        //             break;
+                        //         // previous song
+                        //         case 'b':
+                        //         case 'B':
+                        //             if (selectedSong->prev != NULL){
+                        //                 nextSongName = title;
+                        //                 selectedSong = selectedSong->prev;
+                        //                 title = selectedSong->song->getTitle();
+                        //                 singer = selectedSong->song->getSinger();
+                        //                 duration = selectedSong->song->getDuration();
+                        //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                        //                     s += m * 60;
+                        //                 }
+                        //                 countdown = 0;
+                        //                 if (selectedSong->prev != NULL) {
+                        //                     prevSongName = selectedSong->prev->song->getTitle();
+                        //                 }
+                        //                 else {
+                        //                     prevSongName = "-";
+                        //                 }  
+                        //             }
+                        //             break;
+                        //     }
+                        // }
                         cout << "Now playing: " << title << " by " << singer << " |";
                         if (play) {
                             cout << setfill(' ') << setw(10) << "Playing " << chars[i % sizeof(chars)];
@@ -851,7 +872,7 @@ void playlistMenu(){
                             cout << setfill(' ') << setw(10) << "Paused " << "-";
                         }
                         cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration << " |";
-                        cout << "\r" << flush;
+                        cout << " |  Previous Song: " << prevSongName << " |  Next Song: " << nextSongName << "\r" << flush;
                         // sleep for 1 sec for linux
                         this_thread::sleep_for(chrono::milliseconds(100));
                         // // sleep for Windows
