@@ -186,14 +186,14 @@ void addPlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong){
         while (selectedPlaylistSong->next != NULL) {
             // if any duplicate song
             if (selectedPlaylistSong->song == selectedSong) {
-                cout << "The playlist has this song" << endl;
+                cout << "The Playlist \"" << selectedPlaylist->getPlaylistName() << "\" already has this song inside" << endl;
                 return;
             }
             selectedPlaylistSong = selectedPlaylistSong->next;
         }
         // last not check
         if (selectedPlaylistSong->song == selectedSong) {
-            cout << "The playlist has this song" << endl;
+            cout << "The Playlist \"" << selectedPlaylist->getPlaylistName() << "\" already has this song inside" << endl;
             return;
         }
         // append user selected song
@@ -215,7 +215,7 @@ void displaySongCollection(SongCollection* last){
     // display
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->getTitle() << " - " << last->getSinger() << " Duration: " << last->getDuration();
+        cout << num << ". " << last->getTitle() << " by " << last->getSinger() << "   Duration: " << last->getDuration() << endl;
         last = last->next;
         num++;
     }
@@ -225,7 +225,7 @@ void displaySongCollection(SongCollection* last){
 void displayPlaylistSong(PlaylistSong* last){
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " Duration: " << last->song->getDuration();
+        cout << num << ". " << last->song->getTitle() << " - " << last->song->getSinger() << " Duration: " << last->song->getDuration() << endl;
         last = last->next;
         num++;
     }
@@ -240,12 +240,13 @@ void displayPlaylist(Playlist* last){
     }
     int num = 1;
     while(last != NULL){
-        cout << endl << num << ". " << last->getPlaylistName() << ":";
+        cout << num << ". " << last->getPlaylistName() << ":";
         PlaylistSong* playlistSong = last->songList;
         for(int i=0; i < 3 && playlistSong != NULL; i++){
             cout << " " << playlistSong->song->getTitle();
             playlistSong = playlistSong->next;
         }
+        cout << endl;
         last = last->next;
         num++;
     }
@@ -453,15 +454,15 @@ void collectionMenu(){
     string singer, title, duration;
     do{
         system("cls");
-        cout << "=========================" << endl;
-        cout << "   Collection Menu" << endl;
-        cout << "=========================" << endl;
-        cout << "1. Add songs" << endl;
-        cout << "2. Display songs" << endl;
-        cout << "3. Delete song" << endl;
-        cout << "4. Playlist search" << endl;
-        cout << "0. Back" << endl;
-        cout << "-------------------------" << endl << endl;
+        cout << "===================================" << endl;
+        cout << "    Song Collection Menu" << endl;
+        cout << "===================================" << endl;
+        cout << " 1. Add New Song to Collection" << endl;
+        cout << " 2. Display Songs in Collection" << endl;
+        cout << " 3. Delete Song in Collection" << endl;
+        cout << " 4. Playlist sSarch" << endl;
+        cout << " 0. Back" << endl;
+        cout << "-----------------------------------" << endl << endl;
         cout << "Select your Option: ";
         cin >> option;
         switch(option)
@@ -470,6 +471,10 @@ void collectionMenu(){
                 break;
             case 1: //Add song
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Add Song to Collection" << endl;
+                cout << "===================================" << endl << endl;
                 cin.ignore();
                 cout << "Enter Song Title: ";
                 getline(cin, title);
@@ -492,11 +497,19 @@ void collectionMenu(){
             }
             case 2:// display song            
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Display Collection" << endl;
+                cout << "===================================" << endl << endl;
                 displaySongCollection(song);
                 break;
             }
             case 3: //delete music
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Delete Song in Collection" << endl;
+                cout << "===================================" << endl << endl;
                 // if no song in collection
                 if (song == NULL) 
                 {
@@ -505,6 +518,7 @@ void collectionMenu(){
                 }
                 // display all the song in song collection
                 displaySongCollection(song);
+                cout << "Select a Song: ";
                 cin >> userSong;
                 if (song->length < userSong){
                     cout << "Number Out of Range" << endl;
@@ -515,6 +529,10 @@ void collectionMenu(){
             }
             case 4: //Playlist search
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Playlist Search" << endl;
+                cout << "===================================" << endl << endl;
                 // if no song in collection
                 if (song == NULL) 
                 {
@@ -523,12 +541,17 @@ void collectionMenu(){
                 }
                 // display all the song in song collection
                 displaySongCollection(song);
+                cout << "Select a Song: ";
                 cin >> userSong;
                 if (song->length < userSong){
                     cout << "Number Out of Range" << endl;
                     break;
                 }
                 // display the playlist of the song 
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Playlist Search" << endl;
+                cout << "===================================" << endl << endl;
                 playlistSearch(song, userSong);
                 break;
             }
@@ -547,18 +570,18 @@ void playlistMenu(){
     string playlistName;
     do{
         system("cls");
-        cout << "=========================" << endl;
-        cout << "   Playlist Menu" << endl;
-        cout << "=========================" << endl;
-        cout << "1. Create playlist " << endl;
-        cout << "2. View playlist" << endl;
-        cout << "3. Add songs" << endl;
-        cout << "4. View songs" << endl;
-        cout << "5. Remove songs" << endl;
-        cout << "6. Playlist navigation" << endl;
-        cout << "7. Delete playlist" << endl;
-        cout << "0. Back" << endl;
-        cout << "-------------------------" << endl << endl;
+        cout << "===================================" << endl;
+        cout << "    Playlist Menu" << endl;
+        cout << "===================================" << endl;
+        cout << " 1. Create a New Playlist" << endl;
+        cout << " 2. View Existing Playlist" << endl;
+        cout << " 3. Add New Song to Playlist" << endl;
+        cout << " 4. View songs in Playlist" << endl;
+        cout << " 5. Remove song in the Playlist" << endl;
+        cout << " 6. Music Player" << endl;
+        cout << " 7. Delete Entire Playlist" << endl;
+        cout << " 0. Back" << endl;
+        cout << "-----------------------------------" << endl << endl;
         cout << "Select your Option: ";
         cin >> option;
         switch(option)
@@ -567,6 +590,11 @@ void playlistMenu(){
                 break;
             case 1: // Create playlist
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Create New Playlist" << endl;
+                cout << "===================================" << endl << endl;
+                cout << "Enter Playlist Name: ";
                 cin.ignore();
                 getline(cin, playlistName);
                 addPlaylist(&playlist, playlistName);
@@ -574,6 +602,10 @@ void playlistMenu(){
             }
             case 2: // View playlist
             {
+                system("cls");   
+                cout << "===================================" << endl;
+                cout << "    View Exist Playlist" << endl;
+                cout << "===================================" << endl << endl;
                 // display all playlist
                 // -- loop through all playlist
                 // -- get playlist name, 3 songs
@@ -582,12 +614,17 @@ void playlistMenu(){
             }
             case 3: // Add songs
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Add Song to Playlist" << endl;
+                cout << "===================================" << endl << endl;
                 // display all playlist
                 if (playlist == NULL){  
                     cout << "There is no Playlist created, Please Create Playlist First" << endl;
                     break;
                 }
                 displayPlaylist(playlist);
+                cout << "Select a Playlist: ";
                 cin >> userPlaylist;
                 if (playlist->length < userPlaylist){
                     cout << "Number Out of Range" << endl;
@@ -601,6 +638,7 @@ void playlistMenu(){
                 }
                 // display all/avaliable songs in collection
                 displaySongCollection(song);
+                cout << "Select a Song: ";
                 cin >> userSong;
                 if (song->length < userSong){
                     cout << "Number Out of Range" << endl;
@@ -624,6 +662,10 @@ void playlistMenu(){
             }
             case 4: // View songs
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    View songs in Playlist" << endl;
+                cout << "===================================" << endl << endl;
                 // if the playlist is empty
                 if (playlist == NULL){  
                     cout << "There is no Playlist created, Please Create Playlist First" << endl;
@@ -631,29 +673,39 @@ void playlistMenu(){
                 }
                 // display all playlist
                 displayPlaylist(playlist);
+                cout << "Select a Playlist: ";
                 cin >> userPlaylist;
                 if (playlist->length < userPlaylist){
                     cout << "Number Out of Range" << endl;
                     break;
                 }
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    View songs in Playlist" << endl;
+                cout << "===================================" << endl << endl;
                 // show all song in playlist
                 Playlist* selectedPlaylist = playlist;
                 for (int i = 0; i < userPlaylist - 1; i++)
                 {
                     selectedPlaylist = selectedPlaylist->next;
                 }
-                cout << selectedPlaylist->getPlaylistName() << ":";
+                cout << selectedPlaylist->getPlaylistName() << ":" << endl;
                 displayPlaylistSong(selectedPlaylist->songList);
                 break;
             }
             case 5: // Remove songs
             {
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Remove Song in Playlist" << endl;
+                cout << "===================================" << endl << endl;
                 // display all playlist
                 if (playlist == NULL){  
                     cout << "There is no Playlist created, Please Create Playlist First" << endl;
                     break;
                 }
                 displayPlaylist(playlist);
+                cout << "Select a Playlist: ";
                 cin >> userPlaylist;
                 if (playlist->length < userPlaylist){
                     cout << "Number Out of Range" << endl;
@@ -673,6 +725,7 @@ void playlistMenu(){
                 }
                 // display songs in playlist
                 displayPlaylistSong(selectedPlaylist->songList);
+                cout << "Select a Song: ";
                 cin >> userSong;
                 if (selectedPlaylist->songList->length < userSong){
                     cout << "Number Out of Range" << endl;
@@ -694,12 +747,17 @@ void playlistMenu(){
             case 6: // Playlist navigation
             {
                 // if the playlist is empty
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Music Player" << endl;
+                cout << "===================================" << endl << endl;
                 if (playlist == NULL){  
                     cout << "There is no Playlist created, Please Create Playlist First" << endl;
                     break;
                 }
                 // show user all the playlist
                 displayPlaylist(playlist);
+                cout << "Select a Playlist: ";
                 cin >> userPlaylist;
                  if (playlist->length < userPlaylist){
                     cout << "Number Out of Range" << endl;
@@ -715,10 +773,17 @@ void playlistMenu(){
                 PlaylistSong* selectedSong = selectedPlaylist->songList;
                 int countdown = 0;
                 bool play = true, stop = false;
-                cout << "p: Play/Pause" << endl;
-                cout << "s: Stop" << endl;
-                cout << "n: Next Song" << endl;
-                cout << "b: Previous song" << endl;
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Music Player" << endl;
+                cout << "===================================" << endl;
+                cout << " Press the following key to perform" << endl; 
+                cout << " action." << endl;
+                cout << " P: Play/Pause" << endl;
+                cout << " N: Next Song" << endl;
+                cout << " B: Previous song" << endl << endl;
+                cout << " S: Stop and Exit" << endl;
+                cout << "-----------------------------------" << endl << endl;
                 string title = selectedSong->song->getTitle();
                 string singer = selectedSong->song->getSinger();
                 string duration = selectedSong->song->getDuration();
@@ -740,14 +805,17 @@ void playlistMenu(){
                     //     {
                     //         // play/pause
                     //         case 'p':
+                    //         case 'P':
                     //             play = !play;
                     //             break;
                     //         // stop
                     //         case 's':
+                    //         case 'S':
                     //             stop = true;
                     //             break;
                     //         // next song
                     //         case 'n':
+                    //         case 'N':
                     //             if (selectedSong->next != NULL){
                     //                 selectedSong = selectedSong->next;
                     //                 title = selectedSong->song->getTitle();
@@ -761,6 +829,7 @@ void playlistMenu(){
                     //             break;
                     //         // previous song
                     //         case 'b':
+                    //         case 'B':
                     //             if (selectedSong->prev != NULL){
                     //                 selectedSong = selectedSong->prev;
                     //                 title = selectedSong->song->getTitle();
@@ -772,11 +841,17 @@ void playlistMenu(){
                     //                 countdown = 0;
                     //             }
                     //             break;
+                    //         }
                     //     }
-                    // }
-                        cout << "Now playing: " << title << " - "<< singer << "   " << chars[i % sizeof(chars)];
-                        cout << "   Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration;
-                        cout << "\r" << flush; 
+                        cout << "Now playing: " << title << " by " << singer << " |";
+                        if (play) {
+                            cout << setfill(' ') << setw(10) << "Playing " << chars[i % sizeof(chars)];
+                        }
+                        else {
+                            cout << setfill(' ') << setw(10) << "Paused " << "-";
+                        }
+                        cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration << " |";
+                        cout << "\r" << flush;
                         // sleep for 1 sec for linux
                         this_thread::sleep_for(chrono::milliseconds(100));
                         // // sleep for Windows
@@ -798,13 +873,18 @@ void playlistMenu(){
             }
             case 7: // Delete playlist
             {                
+                system("cls");
+                cout << "===================================" << endl;
+                cout << "    Delete Playlist" << endl;
+                cout << "===================================" << endl << endl;
                 // if the playlist is empty
                 if (playlist == NULL){  
                     cout << "There is no Playlist created, Please Create Playlist First" << endl;
                     break;
                 }
                 // display all playlist
-                displayPlaylist(playlist);                
+                displayPlaylist(playlist);
+                cout << "Select a Playlist: ";              
                 cin >> userPlaylist;
                  if (playlist->length < userPlaylist){
                     cout << "Number Out of Range" << endl;
@@ -841,13 +921,13 @@ int main(){
     // test end here
     do{
         system("cls");
-        cout << "=========================" << endl;
-        cout << "   Main Menu" << endl;
-        cout << "=========================" << endl;
-        cout << "1. Collection" << endl;
-        cout << "2. Playlist"  << endl;
-        cout << "0. Exit " << endl;
-        cout << "-------------------------" << endl << endl;
+        cout << "===================================" << endl;
+        cout << "    Main Menu" << endl;
+        cout << "===================================" << endl;
+        cout << " 1. Song Collection Menu" << endl;
+        cout << " 2. Playlist Menu" << endl;
+        cout << " 0. Exit " << endl;
+        cout << "-----------------------------------" << endl << endl;
         cout << "Select your Option: ";
         cin >> option;
         switch (option)
