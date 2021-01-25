@@ -32,6 +32,7 @@ void deletePlaylist(Playlist** head_ref, int userPlaylist);
 void deletePlaylistSong(PlaylistName* selectedPlaylistName, SongCollection* selectedSong); 
 void deletePlaylistSong(Playlist* selectedPlaylist, SongCollection* selectedSong);
 void playlistSearch(SongCollection* head, int userSong);
+PlaylistSong* randomSonglist(PlaylistSong* playlistSong);
 
 SongCollection* song = NULL;
 Playlist* playlist = NULL;
@@ -449,6 +450,56 @@ void playlistSearch(SongCollection* head, int userSong){
     }
 }
 
+PlaylistSong* randomSonglist(PlaylistSong* playlistSong){
+    PlaylistSong* randomHead= new PlaylistSong;
+    PlaylistSong* last = randomHead;
+    int len = playlistSong->length;
+    // clone a playlistSong
+    for (int i = 0; i < len; i++)
+    {
+        last->song = playlistSong->song;
+        last->next = new PlaylistSong;
+        playlistSong = playlistSong->next;
+        // if not last - will not next in last
+        if (i != (len - 1))
+        {
+            last = last->next;
+        }        
+    }
+    PlaylistSong* prevLoop = NULL;
+    srand(time(0));
+    // loop from len to 1
+    for (int i = len; i > 0; i--) {
+        PlaylistSong* selectedPlaylistSong = randomHead;
+        // loop to the random selected song
+        // rand() % i: random number from 0 till (i - 1)
+        int randNum = (rand() % i);
+        // selected is head
+        if (randNum == 0) {
+            // remove head node
+            randomHead = randomHead->next;
+        } else {
+            PlaylistSong* prevPlaylistSong = NULL;
+            for (int j = 0; j < randNum; j++) {
+                prevPlaylistSong = selectedPlaylistSong;
+                selectedPlaylistSong = selectedPlaylistSong->next;
+            }
+            // delete node
+            prevPlaylistSong->next = selectedPlaylistSong->next;
+        }           
+        // set selectedPlaylistSong->prev
+        selectedPlaylistSong->prev = prevLoop;
+        selectedPlaylistSong->next = NULL;
+        prevLoop = selectedPlaylistSong;
+        // append head to last->next
+        last->next = selectedPlaylistSong;
+        last = last->next;
+    }
+    last->next = NULL;
+    randomHead->length = len;
+    return randomHead;
+}
+
 void collectionMenu(){
     int option, userSong;
     string singer, title, duration;
@@ -460,7 +511,7 @@ void collectionMenu(){
         cout << " 1. Add New Song to Collection" << endl;
         cout << " 2. Display Songs in Collection" << endl;
         cout << " 3. Delete Song in Collection" << endl;
-        cout << " 4. Playlist sSarch" << endl;
+        cout << " 4. Playlist Search" << endl;
         cout << " 0. Back" << endl;
         cout << "-----------------------------------" << endl << endl;
         cout << "Select your Option: ";
@@ -770,7 +821,18 @@ void playlistMenu(){
                     selectedPlaylist = selectedPlaylist->next;   
                 }
                 // Play songs from start 
-                PlaylistSong* selectedSong = selectedPlaylist->songList;
+                bool random;
+                cout << endl << "Do you want to random play?" << endl;
+                cout << " 1. Yes" << endl;
+                cout << " 0. No" << endl << endl;
+                cout << " Enter an option: " << endl;
+                cin >> random;
+                PlaylistSong* selectedSong;
+                if (random) {
+                    selectedSong = randomSonglist(selectedPlaylist->songList);
+                } else {
+                    selectedSong = selectedPlaylist->songList;
+                }                
                 int countdown = 0;
                 bool play = true, stop = false;
                 system("cls");
@@ -781,7 +843,7 @@ void playlistMenu(){
                 cout << " action." << endl;
                 cout << " P: Play/Pause" << endl;
                 cout << " N: Next Song" << endl;
-                cout << " B: Previous song" << endl << endl;
+                cout << " B: Previous song" << endl;
                 cout << " S: Stop and Exit" << endl;
                 cout << "-----------------------------------" << endl << endl;
                 string title = selectedSong->song->getTitle();
@@ -871,7 +933,7 @@ void playlistMenu(){
                         else {
                             cout << setfill(' ') << setw(10) << "Paused " << "-";
                         }
-                        cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration << " |";
+                        cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration;
                         cout << " |  Previous Song: " << prevSongName << " |  Next Song: " << nextSongName << "\r" << flush;
                         // sleep for 1 sec for linux
                         this_thread::sleep_for(chrono::milliseconds(100));
@@ -879,7 +941,8 @@ void playlistMenu(){
                         // Sleep(100);
                     }
                     // if one song finished
-                    if (countdown == s - 1) {
+                    if (countdown == s - 1 && selectedSong->next != NULL) {
+                        prevSongName = title;
                         selectedSong = selectedSong->next;
                         title = selectedSong->song->getTitle();
                         singer = selectedSong->song->getSinger();
@@ -888,8 +951,15 @@ void playlistMenu(){
                             s += m * 60;
                         }
                         countdown = 0;
+                        if (selectedSong->next != NULL) {
+                            nextSongName = selectedSong->next->song->getTitle();
+                        }
+                        else {
+                            nextSongName = "-";
+                        }
                     }
                 }
+                cout << endl << endl << "Song ended" << endl;
                 break;
             }
             case 7: // Delete playlist
@@ -929,15 +999,21 @@ int main(){
     // playlist1: song1, song2, song3
     // playlist2: song1
     // playlist3: 
-    addSong(&song, "song1", "singer1", "0:10");
-    addSong(&song, "song2", "singer2", "0:20");
-    addSong(&song, "song3", "singer3", "3:00");
+    addSong(&song, "song1", "singer1", "0:05");
+    addSong(&song, "song2", "singer2", "0:10");
+    addSong(&song, "song3", "singer3", "0:15");
+    addSong(&song, "song4", "singer4", "0:03");
+    addSong(&song, "song5", "singer5", "0:03");
+    addSong(&song, "song6", "singer6", "0:03");
     addPlaylist(&playlist, "playlist1");
     addPlaylist(&playlist, "playlist2");
     addPlaylist(&playlist, "playlist3");
     addPlaylistSong(playlist, song);
     addPlaylistSong(playlist, song->next);
     addPlaylistSong(playlist, song->next->next);
+    addPlaylistSong(playlist, song->next->next->next);
+    addPlaylistSong(playlist, song->next->next->next->next);
+    addPlaylistSong(playlist, song->next->next->next->next->next);
     addPlaylistSong(playlist->next, song);
     // test end here
     do{
