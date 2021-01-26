@@ -822,7 +822,7 @@ void playlistMenu(){
                 }
                 // Play songs from start 
                 bool random;
-                cout << endl << "Do you want to random play?" << endl;
+                cout << endl << "Do you want to shuffle your playlist?" << endl;
                 cout << " 1. Yes" << endl;
                 cout << " 0. No" << endl << endl;
                 cout << " Enter an option: " << endl;
