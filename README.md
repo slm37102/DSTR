@@ -19,19 +19,19 @@
 2. to multi music           --finished
 3. duration to mm:ss        --finished
 4. error if exceed length   --finished
-5. try catch                --TODO
+5. try catch                --not implemented
 6. doubly linked list       --finished
 7. no same song, playlist   --finished 
 8. getline to store space   --finished
-9. add attribute durationInS to the song collection?
+9. add attribute durationInS to the song collection? -- not implemented
 
 # Additional feature
 - menu                --finished
-- database            --can try if got time
-- shuffle             --can try if got time
+- shuffle             --finished
 - countdown           --finished
-- queue on playlist   --not needed
 - doubly linked list  --finished
+- queue on playlist   --not implemented
+- database            --not implemented
 
 # Data sturcture
 - playlist
