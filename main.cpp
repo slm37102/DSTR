@@ -926,7 +926,8 @@ void playlistMenu(){
                         //             break;
                         //     }
                         // }
-                        cout << "Now playing: " << title << " by " << singer << " |";
+                        cout << "\r                                                                                                                       " << flush;
+                        cout << "\rNow playing: " << title << " by " << singer << " |";
                         if (play) {
                             cout << setfill(' ') << setw(10) << "Playing " << chars[i % sizeof(chars)];
                         }
@@ -934,7 +935,7 @@ void playlistMenu(){
                             cout << setfill(' ') << setw(10) << "Paused " << "-";
                         }
                         cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration;
-                        cout << " |  Previous Song: " << prevSongName << " |  Next Song: " << nextSongName << "\r" << flush;
+                        cout << " |  Previous Song: " << prevSongName << " |  Next Song: " << nextSongName << flush;
                         // sleep for 1 sec for linux
                         this_thread::sleep_for(chrono::milliseconds(100));
                         // // sleep for Windows
