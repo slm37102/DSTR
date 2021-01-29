@@ -740,8 +740,12 @@ void playlistMenu(){
                 {
                     selectedPlaylist = selectedPlaylist->next;
                 }
-                cout << selectedPlaylist->getPlaylistName() << ":" << endl;
-                displayPlaylistSong(selectedPlaylist->songList);
+                if (selectedPlaylist->songList == NULL) {
+                    cout << "No Song in this Playlist" << endl;
+                } else {
+                    cout << selectedPlaylist->getPlaylistName() << ":" << endl;
+                    displayPlaylistSong(selectedPlaylist->songList);
+                }
                 break;
             }
             case 5: // Remove songs
@@ -820,144 +824,133 @@ void playlistMenu(){
                 {
                     selectedPlaylist = selectedPlaylist->next;   
                 }
-                // Play songs from start 
-                bool random;
+                if (selectedPlaylist->songList == NULL) {
+                    cout << "No Song in this Playlist" << endl;
+                    break;
+                }
+                // get song list
+                int random;
                 cout << endl << "Do you want to shuffle your playlist?" << endl;
                 cout << " 1. Yes" << endl;
                 cout << " 0. No" << endl << endl;
-                cout << " Enter an option: " << endl;
+                cout << "Enter an option: " << endl;
                 cin >> random;
-                PlaylistSong* selectedSong;
-                if (random && selectedPlaylist->songList->length > 1) {
+                if (random != 1 && random != 0) {
+                    cout << endl << "Invalid Input" << endl;
+                    break;
+                }
+                PlaylistSong* selectedSong, *randomSongHead = NULL;
+                if (random == 1 && selectedPlaylist->songList->length > 1) {
                     selectedSong = randomSonglist(selectedPlaylist->songList);
+                    randomSongHead = selectedSong;
                 } else {
                     selectedSong = selectedPlaylist->songList;
-                }                
-                int countdown = 0;
-                bool play = true, stop = false;
-                system("cls");
-                cout << "===================================" << endl;
-                cout << "    Music Player" << endl;
-                cout << "===================================" << endl;
-                cout << " Press the following key to perform" << endl; 
-                cout << " action." << endl;
-                cout << " P: Play/Pause" << endl;
-                cout << " N: Next Song" << endl;
-                cout << " B: Previous song" << endl;
-                cout << " S: Stop and Exit" << endl;
-                cout << "-----------------------------------" << endl << endl;
-                string title = selectedSong->song->getTitle();
-                string singer = selectedSong->song->getSinger();
-                string duration = selectedSong->song->getDuration();
+                }
+                // decalre variable       
+                int countdown, m, s;
+                bool play = true, stop = false, changeSong;
+                string title, singer, duration;
                 string prevSongName = "-";
-                string nextSongName;
-                if (selectedSong->next != NULL) {
-                    nextSongName = selectedSong->next->song->getTitle();
-                }
-                else {
-                    nextSongName = "-";
-                }                
+                string nextSongName = selectedSong->next != NULL ? selectedSong->next->song->getTitle() : "-";              
                 char chars[] = { '-', '\\', '|', '/', '-' };
-                int m, s;
-                // duration to seconds
-                if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
-                    s += m * 60;
-                }
                 // display countdown
-                for (countdown; countdown < s && selectedSong != NULL && !stop; countdown+=int(play))
+                do
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        // // uncomment Windows
-                        // // if key is press
-                        // if (_kbhit()) {
-                        //     switch (_getch()){
-                        //         // play/pause
-                        //         case 'p':
-                        //         case 'P':
-                        //             play = !play;
-                        //             break;
-                        //         // stop
-                        //         case 's':
-                        //         case 'S':
-                        //             stop = true;
-                        //             break;
-                        //         // next song
-                        //         case 'n':
-                        //         case 'N':
-                        //             if (selectedSong->next != NULL){
-                        //                 prevSongName = title;
-                        //                 selectedSong = selectedSong->next;
-                        //                 title = selectedSong->song->getTitle();
-                        //                 singer = selectedSong->song->getSinger();
-                        //                 duration = selectedSong->song->getDuration();
-                        //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
-                        //                     s += m * 60;
-                        //                 }
-                        //                 countdown = 0;
-                        //                 if (selectedSong->next != NULL) {
-                        //                     nextSongName = selectedSong->next->song->getTitle();
-                        //                 }
-                        //                 else {
-                        //                     nextSongName = "-";
-                        //                 }     
-                        //             }
-                        //             break;
-                        //         // previous song
-                        //         case 'b':
-                        //         case 'B':
-                        //             if (selectedSong->prev != NULL){
-                        //                 nextSongName = title;
-                        //                 selectedSong = selectedSong->prev;
-                        //                 title = selectedSong->song->getTitle();
-                        //                 singer = selectedSong->song->getSinger();
-                        //                 duration = selectedSong->song->getDuration();
-                        //                 if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
-                        //                     s += m * 60;
-                        //                 }
-                        //                 countdown = 0;
-                        //                 if (selectedSong->prev != NULL) {
-                        //                     prevSongName = selectedSong->prev->song->getTitle();
-                        //                 }
-                        //                 else {
-                        //                     prevSongName = "-";
-                        //                 }  
-                        //             }
-                        //             break;
-                        //     }
-                        // }
-                        cout << "\r                                                                                                                       " << flush;
-                        cout << "\rNow playing: " << title << " by " << singer << " |";
-                        if (play) {
-                            cout << setfill(' ') << setw(10) << "Playing " << chars[i % sizeof(chars)];
-                        }
-                        else {
-                            cout << setfill(' ') << setw(10) << "Paused " << "-";
-                        }
-                        cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration;
-                        cout << " |  Previous Song: " << prevSongName << " |  Next Song: " << nextSongName << flush;
-                        // sleep for 1 sec for linux
-                        this_thread::sleep_for(chrono::milliseconds(100));
-                        // // sleep for Windows
-                        // Sleep(100);
+                    system("cls");
+                    cout << "===================================" << endl;
+                    cout << "    Music Player" << endl;
+                    cout << "===================================" << endl;
+                    cout << " Press the following key to perform" << endl; 
+                    cout << " action." << endl;
+                    cout << " P: Play/Pause" << endl;
+                    cout << " N: Next Song" << endl;
+                    cout << " B: Previous song" << endl;
+                    cout << " S: Stop and Exit" << endl;
+                    cout << "-----------------------------------" << endl << endl;
+                    cout << "Previous Song: " << prevSongName << " |  Next Song: " << nextSongName << endl;
+                    title = selectedSong->song->getTitle();
+                    singer = selectedSong->song->getSinger();
+                    duration = selectedSong->song->getDuration();
+                    // duration to seconds
+                    if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
+                        s += m * 60;
                     }
-                    // if one song finished playing
-                    if (countdown == s - 1 && selectedSong->next != NULL) {
-                        prevSongName = title;
-                        selectedSong = selectedSong->next;
-                        title = selectedSong->song->getTitle();
-                        singer = selectedSong->song->getSinger();
-                        duration = selectedSong->song->getDuration();
-                        if (sscanf(duration.c_str(), "%d:%d", &m, &s) > 1){
-                            s += m * 60;
+                    countdown = 0;
+                    changeSong = false;
+                    for (countdown; countdown < s && !changeSong && !stop; countdown+=int(play))
+                    {
+                        // every 0.1 second
+                        for (int i = 0; i < 10 && !changeSong && !stop; i++)
+                        {
+                            // // uncomment Windows
+                            // // if key is press
+                            // if (_kbhit()) {
+                            //     switch (_getch()){
+                            //         // play/pause
+                            //         case 'p':
+                            //         case 'P':
+                            //             play = !play;
+                            //             break;
+                            //         // stop
+                            //         case 's':
+                            //         case 'S':
+                            //             stop = true;
+                            //             break;
+                            //         // next song
+                            //         case 'n':
+                            //         case 'N':
+                            //             if (selectedSong->next != NULL){
+                            //                 prevSongName = title;
+                            //                 selectedSong = selectedSong->next;
+                            //                 nextSongName = selectedSong->next != NULL ? selectedSong->next->song->getTitle() : "-";
+                            //                 changeSong = true;
+                            //             }
+                            //             break;
+                            //         // previous song
+                            //         case 'b':
+                            //         case 'B':
+                            //             if (selectedSong->prev != NULL){
+                            //                 nextSongName = title;
+                            //                 selectedSong = selectedSong->prev;
+                            //                 prevSongName = selectedSong->prev != NULL ? selectedSong->prev->song->getTitle() : "-";
+                            //                 changeSong = true;
+                            //             }
+                            //             break;
+                            //     }
+                            // }
+                            
+                            cout << "\r                                                                                                  " << flush;
+                            cout << "\rNow playing: " << title << " by " << singer << " |";
+                            if (play) {
+                                cout << setfill(' ') << setw(10) << "Playing " << chars[i % sizeof(chars)];
+                            }
+                            else {
+                                cout << setfill(' ') << setw(10) << "Paused " << "-";
+                            }
+                            cout << " |  Duration: " << countdown / 60 << ":" << setfill('0') << setw(2) << countdown % 60 << "/" << duration << flush;
+                            // sleep for 1 sec for linux
+                            this_thread::sleep_for(chrono::milliseconds(100));
+                            // // sleep for Windows
+                            // Sleep(100);
                         }
-                        countdown = 0;
-                        if (selectedSong->next != NULL) {
-                            nextSongName = selectedSong->next->song->getTitle();
+                        // if one song finished playing
+                        if (countdown == s - 1) {
+                            prevSongName = title;
+                            selectedSong = selectedSong->next;
+                            changeSong = true;
+                            if (selectedSong != NULL){
+                                nextSongName = selectedSong->next != NULL ? selectedSong->next->song->getTitle() : "-";
+                            }
                         }
-                        else {
-                            nextSongName = "-";
-                        }
+                    }
+                } while (selectedSong != NULL && !stop);
+                // delete random song list
+                if (randomSongHead != NULL){
+                    PlaylistSong* temp;
+                    while(randomSongHead != NULL) {
+                        temp = randomSongHead->next;
+                        delete randomSongHead;
+                        randomSongHead = temp;
                     }
                 }
                 cout << endl << endl << "Song ended" << endl;
