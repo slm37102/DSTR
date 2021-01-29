@@ -787,11 +787,11 @@ void playlistMenu(){
                 {
                     selectedPlaylistSong = selectedPlaylistSong->next;
                 }
-                // delete song in the playlist
                 string songString = selectedPlaylistSong->song->getTitle(), playlistString = selectedPlaylist->getPlaylistName();
-                deletePlaylistSong(selectedPlaylist, selectedPlaylistSong);
                 // delete playlistName in song collection 
                 deletePlaylistName(selectedPlaylistSong, selectedPlaylist);
+                // delete song in the playlist
+                deletePlaylistSong(selectedPlaylist, selectedPlaylistSong);
                 cout << "Song \""<< songString <<"\" deleted in Playlist \""<< playlistString <<"\"" << endl;
                 break;
             }
