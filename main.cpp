@@ -828,7 +828,7 @@ void playlistMenu(){
                 cout << " Enter an option: " << endl;
                 cin >> random;
                 PlaylistSong* selectedSong;
-                if (random) {
+                if (random && selectedPlaylist->songList->length > 1) {
                     selectedSong = randomSonglist(selectedPlaylist->songList);
                 } else {
                     selectedSong = selectedPlaylist->songList;
@@ -941,7 +941,7 @@ void playlistMenu(){
                         // // sleep for Windows
                         // Sleep(100);
                     }
-                    // if one song finished
+                    // if one song finished playing
                     if (countdown == s - 1 && selectedSong->next != NULL) {
                         prevSongName = title;
                         selectedSong = selectedSong->next;
