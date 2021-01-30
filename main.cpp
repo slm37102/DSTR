@@ -458,12 +458,12 @@ PlaylistSong* randomSonglist(PlaylistSong* playlistSong){
     for (int i = 0; i < len; i++)
     {
         last->song = playlistSong->song;
-        last->next = new PlaylistSong;
         playlistSong = playlistSong->next;
         // if not last - will not next in last
         if (i != (len - 1))
         {
             last = last->next;
+            last->next = new PlaylistSong;
         }        
     }
     PlaylistSong* prevLoop = NULL;
@@ -495,7 +495,6 @@ PlaylistSong* randomSonglist(PlaylistSong* playlistSong){
         last->next = selectedPlaylistSong;
         last = last->next;
     }
-    last->next = NULL;
     randomHead->length = len;
     return randomHead;
 }
