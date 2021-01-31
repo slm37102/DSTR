@@ -462,8 +462,8 @@ PlaylistSong* randomSonglist(PlaylistSong* playlistSong){
         // if not last - will not next in last
         if (i != (len - 1))
         {
-            last = last->next;
             last->next = new PlaylistSong;
+            last = last->next;
         }        
     }
     PlaylistSong* prevLoop = NULL;
