@@ -486,12 +486,16 @@ PlaylistSong* randomSonglist(PlaylistSong* playlistSong){
             }
             // delete node
             prevPlaylistSong->next = selectedPlaylistSong->next;
+            // if the choose the last and it is the first loop
+            if (randNum == i - 1 && i == len) {
+                last = prevPlaylistSong;
+            }
         }           
         // set selectedPlaylistSong->prev
         selectedPlaylistSong->prev = prevLoop;
         selectedPlaylistSong->next = NULL;
         prevLoop = selectedPlaylistSong;
-        // append head to last->next
+        // append selected to last->next
         last->next = selectedPlaylistSong;
         last = last->next;
     }
